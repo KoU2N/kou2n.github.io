@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>七种脱壳方法总结 - KoU2N‘s BLOG</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="KoU2N" /><meta name="description" content="单步跟踪法 1.OD载入，不分析代码。 2.近CALL—F7，远CALL—F8，实现向下的跳转。 3.有回跳处，下一句代码处—F4 （右键—代码断点" /><meta name="keywords" content="KoU2N, blog, KoU2N" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.53 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://kou2n.github.io/post/%E4%B8%83%E7%A7%8D%E8%84%B1%E5%A3%B3%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="七种脱壳方法总结" />
+<meta property="og:description" content="单步跟踪法 1.OD载入，不分析代码。 2.近CALL—F7，远CALL—F8，实现向下的跳转。 3.有回跳处，下一句代码处—F4 （右键—代码断点" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kou2n.github.io/post/%E4%B8%83%E7%A7%8D%E8%84%B1%E5%A3%B3%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/" /><meta property="article:published_time" content="2012-01-25T22:50:16&#43;00:00"/>
+<meta property="article:modified_time" content="2012-01-25T22:50:16&#43;00:00"/>
+
+<meta itemprop="name" content="七种脱壳方法总结">
+<meta itemprop="description" content="单步跟踪法 1.OD载入，不分析代码。 2.近CALL—F7，远CALL—F8，实现向下的跳转。 3.有回跳处，下一句代码处—F4 （右键—代码断点">
+
+
+<meta itemprop="datePublished" content="2012-01-25T22:50:16&#43;00:00" />
+<meta itemprop="dateModified" content="2012-01-25T22:50:16&#43;00:00" />
+<meta itemprop="wordCount" content="760">
+
+
+
+<meta itemprop="keywords" content="windows逆向,脱壳," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="七种脱壳方法总结"/>
+<meta name="twitter:description" content="单步跟踪法 1.OD载入，不分析代码。 2.近CALL—F7，远CALL—F8，实现向下的跳转。 3.有回跳处，下一句代码处—F4 （右键—代码断点"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">KoU2N</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">KoU2N</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">七种脱壳方法总结</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2012-01-25 </span>
+        <div class="post-category">
+            <a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"> 信息安全 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#单步跟踪法">单步跟踪法</a></li>
+<li><a href="#最后一次异常法">最后一次异常法</a></li>
+<li><a href="#模拟跟踪法">模拟跟踪法</a></li>
+<li><a href="#esp定律法">ESP定律法</a></li>
+<li><a href="#内存镜像法">内存镜像法</a></li>
+<li><a href="#一步到达oep法">一步到达OEP法</a></li>
+<li><a href="#sfx法">SFX法</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="单步跟踪法">单步跟踪法</h2>
+
+<p>1.OD载入，不分析代码。
+2.近CALL—F7，远CALL—F8，实现向下的跳转。
+3.有回跳处，下一句代码处—F4 （右键—代码断点运行到所选）
+4.大的跳转（大跨段，JMP<strong><em>或JE</em></strong>或RETN），很快就会到OEP</p>
+
+<h2 id="最后一次异常法">最后一次异常法</h2>
+
+<p>1.OD打开—点选项—调试选项—去掉所有异常—CTRL+F2重载.
+2.SHIFT+F9.只到程序运行，记下次数M
+3.CTRL+F2重载—按SHIFT+F9（次数为M-1次）
+4.按CTRL+G—输入OE右下角的SE句柄前的地址.
+5.F2下断—SHIFT+F9到断点处.
+6.去断按F8，到OEP.</p>
+
+<h2 id="模拟跟踪法">模拟跟踪法</h2>
+
+<p>无暗桩情况下使用
+1.F9试运行，跑起来就无SEH暗桩之类的，否则就有.
+2.ALT+N打开内存镜像，找到包含“=sfx,imports reloco tions”字符
+3.地址=***  命令行输入:tceip&lt;***,回车</p>
+
+<h2 id="esp定律法">ESP定律法</h2>
+
+<p>1.F8，观察OD右上角寄存器中ESP有没有实现（红色）
+2.命令行下 DD ******（当前代码ESP值），回车
+3.DD就选中下端地址，断点—硬件访问—DWORD断点，F9运行，到跳转处按F8 到OEP</p>
+
+<h2 id="内存镜像法">内存镜像法</h2>
+
+<p>1.OD载入软件
+2.点选项—调试选项—忽略全部—CTRL+F2重载
+3.ALT+N打开内存镜像，找程序第一个.rsrc—F2下断—SHIFT+F9运行到断点，再打开找到程序第一个.rsrc上面的.code处（就是00401000处），F2下断—SHIFT+F9或无异常按F9，到OEP</p>
+
+<h2 id="一步到达oep法">一步到达OEP法</h2>
+
+<p>只适合少数壳，如UPX，ASPACK
+1.CTRL+F—输入：POPAD.回车查找—F2下断—F9运行到此处.
+2.来到大跳转处，点F8到OEP.</p>
+
+<h2 id="sfx法">SFX法</h2>
+
+<p>1.设置OD，忽略所有异常.
+2.切换到SFX选项卡，选择“字节模式跟踪实际入口”，确定.
+3.重载—“否”压缩代码，</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">KoU2N</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2012-01-25</span>
+  </p>
+  
+  
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/windows%E9%80%86%E5%90%91/">windows逆向</a>
+          <a href="/tags/%E8%84%B1%E5%A3%B3/">脱壳</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E9%85%B7%E7%8B%972012%E5%8E%BB%E5%B9%BF%E5%91%8A/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">酷狗2012去广告</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/%E5%85%B3%E4%BA%8Eword%E7%B1%BB%E5%8A%A0%E5%AF%86%E6%96%87%E6%A1%A3/">
+            <span class="next-text nav-default">关于word类加密文档</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:gao_yun@.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/kouunn" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://kou2n.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">KoU2N</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

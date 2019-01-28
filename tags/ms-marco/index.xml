@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MS MARCO on KoU2N‘s BLOG</title>
+    <link>https://kou2n.github.io/tags/ms-marco/</link>
+    <description>Recent content in MS MARCO on KoU2N‘s BLOG</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 24 Jan 2019 17:48:54 +0000</lastBuildDate>
+    
+	<atom:link href="https://kou2n.github.io/tags/ms-marco/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>PASSAGE RE-RANKING WITH BERT[论文翻译]</title>
+      <link>https://kou2n.github.io/post/passage-re-ranking-with-bert/</link>
+      <pubDate>Thu, 24 Jan 2019 17:48:54 +0000</pubDate>
+      
+      <guid>https://kou2n.github.io/post/passage-re-ranking-with-bert/</guid>
+      <description>关于 原文:https://arxiv.org/abs/1901.04085 代码:https://github.com/nyu-dl/dl4m</description>
+    </item>
+    
+  </channel>
+</rss>

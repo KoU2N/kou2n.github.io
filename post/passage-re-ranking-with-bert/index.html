@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>PASSAGE RE-RANKING WITH BERT[论文翻译] - KoU2N‘s BLOG</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="KoU2N" /><meta name="description" content="关于 原文:https://arxiv.org/abs/1901.04085 代码:https://github.com/nyu-dl/dl4m" /><meta name="keywords" content="KoU2N, blog, KoU2N" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.53 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://kou2n.github.io/post/passage-re-ranking-with-bert/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="PASSAGE RE-RANKING WITH BERT[论文翻译]" />
+<meta property="og:description" content="关于 原文:https://arxiv.org/abs/1901.04085 代码:https://github.com/nyu-dl/dl4m" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kou2n.github.io/post/passage-re-ranking-with-bert/" /><meta property="article:published_time" content="2019-01-24T17:48:54&#43;00:00"/>
+<meta property="article:modified_time" content="2019-01-24T17:48:54&#43;00:00"/>
+
+<meta itemprop="name" content="PASSAGE RE-RANKING WITH BERT[论文翻译]">
+<meta itemprop="description" content="关于 原文:https://arxiv.org/abs/1901.04085 代码:https://github.com/nyu-dl/dl4m">
+
+
+<meta itemprop="datePublished" content="2019-01-24T17:48:54&#43;00:00" />
+<meta itemprop="dateModified" content="2019-01-24T17:48:54&#43;00:00" />
+<meta itemprop="wordCount" content="2711">
+
+
+
+<meta itemprop="keywords" content="论文,BERT,MS MARCO," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PASSAGE RE-RANKING WITH BERT[论文翻译]"/>
+<meta name="twitter:description" content="关于 原文:https://arxiv.org/abs/1901.04085 代码:https://github.com/nyu-dl/dl4m"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">KoU2N</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">KoU2N</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">PASSAGE RE-RANKING WITH BERT[论文翻译]</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-01-24 </span>
+        <div class="post-category">
+            <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"> 人工智能 </a>
+            <a href="/categories/%E8%AE%BA%E6%96%87/"> 论文 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#摘要">摘要</a></li>
+<li><a href="#引言">引言</a></li>
+<li><a href="#用bert进行段落重排">用BERT进行段落重排</a></li>
+<li><a href="#实验">实验</a>
+<ul>
+<li><a href="#ms-marco">MS MARCO</a></li>
+<li><a href="#trec-car">TREC-CAR</a></li>
+<li><a href="#结果">结果</a></li>
+</ul></li>
+<li><a href="#结论">结论</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<div class='align-center'>
+  <p><img src="0.jpg" alt="img" title="jpg" /></p>
+
+</div>
+
+<div class="admonition info"><p class="admonition-title">关于</p>
+  <p>原文:<a href="https://arxiv.org/abs/1901.04085">https://arxiv.org/abs/1901.04085</a>
+代码:<a href="https://github.com/nyu-dl/dl4marco-bert">https://github.com/nyu-dl/dl4marco-bert</a></p>
+
+<blockquote>
+<p><strong>Rodrigo Nogueira</strong> ，New York University<br />
+rodrigonogueira@nyu.edu<br />
+<strong>Kyunghyun Cho</strong>,New York University,Facebook AI Research,CIFAR Azrieli Global Scholar<br />
+kyunghyun.cho@nyu.edu</p>
+</blockquote>
+
+</div>
+
+<h1 id="摘要">摘要</h1>
+
+<p>最近，神经模型在语言建模任务上预训练</p>
+
+<blockquote>
+<p>例如ELMo (Peters et al., 2017), OpenAI GPT (Radford et al., 2018), and BERT (Devlin et al., 2018)</p>
+</blockquote>
+
+<ul>
+<li>在各种自然语言处理任务中取得了令人瞩目的成果，例如问答和自然语言推理。</li>
+<li>在本文中，我们描述了一个简单的BERT重新实现，用于基于查询的段落重新排序。</li>
+<li>我们的系统是TREC-CAR数据集的最新技术，也是MS MARCO段落检索任务排行榜的第一(<a href="http://www.msmarco.org/leaders.aspx">MS MARCO排行榜</a>)，在MRR@10中的表现优于先前的技术水平27％(相对)。</li>
+</ul>
+
+<h1 id="引言">引言</h1>
+
+<p>近年来，我们已经看到机器阅读理解的快速进展大规模数据集</p>
+
+<blockquote>
+<p>如SQuAD (Rajpurkar et al., 2016), MS MARCO (Nguyen et al., 2016),SearchQA (Dunn et al., 2017), TriviaQA (Joshi et al., 2017) and QUASAR-T (Dhingra et al., 2017),和神经模型的广泛采用，如BiDAF (Seo et al., 2016), DrQA (Chen et al.,2017), DocumentQA (Clark &amp; Gardner, 2017), and QAnet (Yu et al., 2018).</p>
+</blockquote>
+
+<p>信息检索（IR）社区也经历了神经排序模型的蓬勃发展，例如</p>
+
+<blockquote>
+<p>DRMM (Guo et al., 2016), KNRM (Xiong et al., 2017), CoPACRR (Hui et al., 2018), and DUET (Mitra et al., 2017).</p>
+</blockquote>
+
+<ul>
+<li>然而，直到最近，除了TREC-CAR(Dietz et al.,2017)之外，只有少数大型数据集用于段落排序。与更传统的IR技术相比，这至少部分地阻止了神经排序模型的成功(Lin，2019)。</li>
+<li>我们认为，在阅读理解任务上可能取得很大进展的两个要素现在也可用于段落排名任务。也就是说，包含了来自真实用户的100万个查询以及由人类注释的相应段落的MS MARCO Passage Ranking数据集，以及功能强大的通用自然语言处理模型BERT。</li>
+<li>在本文中，我们详细描述了我们如何将BERT重新用作段落Re-Ranker，并在MS MARCO的文章重新排序任务上取得了最先进的成果。</li>
+</ul>
+
+<h1 id="用bert进行段落重排">用BERT进行段落重排</h1>
+
+<p><strong>任务</strong></p>
+
+<p>一个简单的问答流程(pipeline)由三个主要阶段组成。
+- 首先，通过标准机制（如bm25）从语料库中检索到大量（例如，一千）与给定问题相关的文档。
+- 在第二阶段，通过重新排序，通过更加计算密集的方法对这些文档中的每一个进行评分和重新排序。
+- 最后，前十个或前五十个文档将通过答案生成模块作为候选答案的来源。
+- 在本文中，我们描述了如何实现这个流程(pipeline)的第二阶段，段落重新排序。</p>
+
+<p><strong>方法</strong></p>
+
+<p>Re-Ranker的工作是估算候选文章$d_i$与查询q的相关性得分$s_i$。</p>
+
+<ul>
+<li>我们用BERT作为我们的Re-Ranker。</li>
+<li>将查询作为句子A提供，将段落文本作为句子B提供。使用与Devlin et al.(2018)相同的标记方法</li>
+<li>缩短查询，使其最多具有64个词(token)。</li>
+<li>还缩短了段落文本，这样查询、段落和分隔符标记的串联的最大长度为512个词(token)。</li>
+<li>使用一个$BERT_{large}$模型作为二元分类模型。即使用[CLS]向量作为单层神经网络的输入，以获得段落相关的概率。</li>
+<li>独立地计算每个段落的概率，并根据这些概率对它们进行排序，从而获得最终的段落列表。</li>
+<li>我们从一个预先训练好的BERT模型开始训练，并使用交叉熵损失将其微调到我们的重新排序任务。</li>
+</ul>
+
+<p>$$L=-\sum_{j\in J_{pos}} \log(s_j)- \sum_{j\in J_{neg}} \log(1-s_j)  \tag{1} $$</p>
+
+<p>$$\text{$J{pos}$是相关段落的索引集}$$
+$$\text{$J{neg}$是用bm25检索的前1000个文档中非相关段落的索引集。}$$</p>
+
+<h1 id="实验">实验</h1>
+
+<p>我们在两个段落排名数据集上训练和评估我们的模型，MS MARCO和TREC-CAR。</p>
+
+<h2 id="ms-marco">MS MARCO</h2>
+
+<ul>
+<li>培训集包含大约400个查询元组、相关段落和非相关段落。</li>
+<li>开发集包含大约6900个查询，每个查询都与从Marco语料库中检索到的前1000篇文章进行配对。</li>
+<li>平均而言，每个查询都有一个相关的段落。但是，有些没有相关的段落，因为语料库最初是通过从Bing搜索引擎中检索前10个段落并进行注释来构建的。因此，BM25可能无法检索到某些相关段落。</li>
+<li>还提供了一个评估集，其中包含大约6800个查询及其前1000个检索到的没有相关性注释的段落。</li>
+</ul>
+
+<p><strong>训练</strong></p>
+
+<ul>
+<li>我们使用批量大小为32（32 sequences * 512 tokens = 16,384 tokens/batch）的<a href="https://cloud.google.com/tpu/">TPU</a>对模型进行微调，每次迭代400K，大约需要70个小时。</li>
+<li>这相当于在12.8M（400K * 32）的查询段落对上进行的训练，或少于完整培训集的2%。</li>
+<li>在接下来10天的训练中，我们看不到dev集有任何提升，这相当于总共看到50M对。</li>
+<li>我们使用Adam（Kingma&amp;BA，2014）<br />
+
+<ul>
+<li>初始学习率设置为 $3 \times 10^6$ ，$\beta_1=0.9$，$\beta_2=0.999$，l2权重衰减(L2 weight decay)为0.01。</li>
+<li>学习率在前10000步预热，学习率线性衰减。我们对所有层使用0.1的dropout probability。</li>
+</ul></li>
+</ul>
+
+<h2 id="trec-car">TREC-CAR</h2>
+
+<ul>
+<li>由Dietz等人介绍(2017)，在这个数据集中，输入查询是维基百科文章标题与其章节标题的串联。</li>
+<li>相关段落是该节中的段落。</li>
+<li>语料库包括所有的英语维基百科段落，除了摘要。</li>
+<li>发布的数据集有五个预定义文件夹，我们使用前四个作为训练集(大约3M的查询)，其余的作为验证集(大约700K的查询)。</li>
+<li>测试集与用于评估提交给TREC-CAR 2017的测试集相同（约1800个查询）。</li>
+</ul>
+
+<p>尽管TREC-CAR 2017组织者为测试集提供了手动注释，但只有提交给竞赛的系统检索到的前五个段落才有手动注释。这意味着如果真正的相关段落排名较低，则不会对其进行注释。 因此，我们使用自动注释进行评估，自动注释为所有可能的查询 - 段落对提供相关性分数。</p>
+
+<p><strong>训练</strong></p>
+
+<ul>
+<li>我们遵循与MS Marco数据集描述的相同的过程来微调Trec-Car上的模型。然而，有一个重要的区别。</li>
+<li>官方预训练的<a href="https://github.com/google-research/bert">BERT模型</a>在完整的wikipedia上进行了预训练，因此他们已经看到了用于trec-car测试集的wikipedia文档，尽管在无人监督的情况下。因此，为了避免测试数据泄漏到训练中，我们仅在TREC-CAR训练集使用的维基百科的一半上预训练BERT Re-Ranker。</li>
+<li>对于微调数据，我们通过使用BM25从整个TREC-CAR语料库中检索前十个段落来生成查询 - 段落对。 这意味着我们最终会得到30M示例对（3M查询 * 10 段落/查询）来训练我们的模型。</li>
+<li>我们训练它进行400k迭代，或12.8M示例（400k迭代* 32对/批），这相当于训练集的40％。</li>
+<li>与MS MARCO实验类似，我们没有看到通过长时间训练模型在dev集上有任何收获。</li>
+</ul>
+
+<h2 id="结果">结果</h2>
+
+<p><div class='align-center'>
+  <p><img src="1.png" alt="img" title="png" /></p>
+
+</div>
+我们将主要结果显示在表1中。尽管对部分可用数据进行了培训，但所提出的基于BERT的模型在这两项任务上都大大超过了先前的最先进模型。</p>
+
+<h1 id="结论">结论</h1>
+
+<p>我们已经描述了使用BERT简单改编作为段落Re-Ranker，它已成为两个不同任务的最新技术，即TREC-CAR和MS MARCO。
+我们已经公开了复现代码。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">KoU2N</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2019-01-24</span>
+  </p>
+  
+  
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E8%AE%BA%E6%96%87/">论文</a>
+          <a href="/tags/bert/">BERT</a>
+          <a href="/tags/ms-marco/">MS MARCO</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E5%85%A5%E9%97%A82/">
+            <span class="next-text nav-default">信息检索入门2</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:gao_yun@.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/kouunn" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://kou2n.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">KoU2N</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

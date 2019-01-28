@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>西电第三届网络攻防大赛线上赛破解题目第四关 - KoU2N‘s BLOG</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="KoU2N" /><meta name="description" content="好久没搞cm了，接着上次西电的破解题目，第三题没啥技术含量，突破一个按钮就ok，直接搞第4题，废话不多说。 目标程序，是一个cmd的控制台应用" /><meta name="keywords" content="KoU2N, blog, KoU2N" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.53 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%A0%B4%E8%A7%A3%E9%A2%98%E7%9B%AE%E7%AC%AC%E5%9B%9B%E5%85%B3/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="西电第三届网络攻防大赛线上赛破解题目第四关" />
+<meta property="og:description" content="好久没搞cm了，接着上次西电的破解题目，第三题没啥技术含量，突破一个按钮就ok，直接搞第4题，废话不多说。 目标程序，是一个cmd的控制台应用" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%A0%B4%E8%A7%A3%E9%A2%98%E7%9B%AE%E7%AC%AC%E5%9B%9B%E5%85%B3/" /><meta property="article:published_time" content="2013-05-18T19:53:21&#43;00:00"/>
+<meta property="article:modified_time" content="2013-05-18T19:53:21&#43;00:00"/>
+
+<meta itemprop="name" content="西电第三届网络攻防大赛线上赛破解题目第四关">
+<meta itemprop="description" content="好久没搞cm了，接着上次西电的破解题目，第三题没啥技术含量，突破一个按钮就ok，直接搞第4题，废话不多说。 目标程序，是一个cmd的控制台应用">
+
+
+<meta itemprop="datePublished" content="2013-05-18T19:53:21&#43;00:00" />
+<meta itemprop="dateModified" content="2013-05-18T19:53:21&#43;00:00" />
+<meta itemprop="wordCount" content="1111">
+
+
+
+<meta itemprop="keywords" content="crackme,windows逆向,win32console,西电网络攻防大赛," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="西电第三届网络攻防大赛线上赛破解题目第四关"/>
+<meta name="twitter:description" content="好久没搞cm了，接着上次西电的破解题目，第三题没啥技术含量，突破一个按钮就ok，直接搞第4题，废话不多说。 目标程序，是一个cmd的控制台应用"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">KoU2N</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">KoU2N</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">西电第三届网络攻防大赛线上赛破解题目第四关</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2013-05-18 </span>
+        <div class="post-category">
+            <a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"> 信息安全 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#目标程序-是一个cmd的控制台应用程序">目标程序，是一个cmd的控制台应用程序：</a></li>
+<li><a href="#解题的要求提示">解题的要求提示</a></li>
+<li><a href="#上od-找main函数-还有关键调用call">上od，找main函数，还有关键调用call</a></li>
+<li><a href="#下面是关键">下面是关键</a></li>
+<li><a href="#循环10次-从0到9所以是10次">循环10次，从0到9所以是10次</a></li>
+<li><a href="#上面这俩句直接显示success成功">上面这俩句直接显示success成功</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<p>好久没搞cm了，接着上次西电的破解题目，第三题没啥技术含量，突破一个按钮就ok，直接搞第4题，废话不多说。</p>
+
+<h2 id="目标程序-是一个cmd的控制台应用程序">目标程序，是一个cmd的控制台应用程序：</h2>
+
+<p><div class='align-center'>
+  <p><img src="1.jpg" alt="img" title="jpg" /></p>
+
+</div>
+<!-- more --></p>
+
+<h2 id="解题的要求提示">解题的要求提示</h2>
+
+<p><div class='align-center'>
+  <p><img src="2.jpg" alt="img" title="jpg" /></p>
+
+</div>
+username=xdsec
+算出password，也就是key</p>
+
+<hr />
+
+<h2 id="上od-找main函数-还有关键调用call">上od，找main函数，还有关键调用call</h2>
+
+<p>方法就是一直单步，不让程序跑飞，哪个call让程序跑飞就F7进哪个call，继续单步。
+进了2个call之后，到了关键部分，代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="m">00401390</span>  /$  <span class="m">55</span>            push ebp 
+<span class="m">00401391</span>  <span class="p">|</span>.  89E5          mov ebp,esp 
+<span class="m">00401393</span>  <span class="p">|</span>.  81EC F8000000 sub esp,0xF8 
+<span class="m">00401399</span>  <span class="p">|</span>.  83E4 F0       and esp,0xFFFFFFF0 
+0040139C  <span class="p">|</span>.  B8 <span class="m">00000000</span>   mov eax,0x0 
+004013A1  <span class="p">|</span>.  83C0 0F       add eax,0xF 
+004013A4  <span class="p">|</span>.  83C0 0F       add eax,0xF 
+004013A7  <span class="p">|</span>.  C1E8 <span class="m">04</span>       shr eax,0x4 
+004013AA  <span class="p">|</span>.  C1E0 <span class="m">04</span>       shl eax,0x4 
+004013AD  <span class="p">|</span>.  <span class="m">8985</span> 24FFFFFF mov <span class="o">[</span>local.55<span class="o">]</span>,eax 
+004013B3  <span class="p">|</span>.  8B85 24FFFFFF mov eax,<span class="o">[</span>local.55<span class="o">]</span> 
+004013B9  <span class="p">|</span>.  E8 D2C00000   call dumped.0040D490 
+004013BE  <span class="p">|</span>.  E8 0DBD0000   call dumped.0040D0D0 
+004013C3  <span class="p">|</span>.  A1 <span class="m">00004400</span>   mov eax,dword ptr ds:<span class="o">[</span>0x440000<span class="o">]</span> 
+004013C8  <span class="p">|</span>.  <span class="m">8945</span> D8       mov <span class="o">[</span>local.10<span class="o">]</span>,eax 
+004013CB  <span class="p">|</span>.  A1 <span class="m">04004400</span>   mov eax,dword ptr ds:<span class="o">[</span>0x440004<span class="o">]</span> 
+004013D0  <span class="p">|</span>.  <span class="m">8945</span> DC       mov <span class="o">[</span>local.9<span class="o">]</span>,eax 
+004013D3  <span class="p">|</span>.  A1 <span class="m">08004400</span>   mov eax,dword ptr ds:<span class="o">[</span>0x440008<span class="o">]</span> 
+004013D8  <span class="p">|</span>.  <span class="m">8945</span> E0       mov <span class="o">[</span>local.8<span class="o">]</span>,eax 
+004013DB  <span class="p">|</span>.  A1 0C004400   mov eax,dword ptr ds:<span class="o">[</span>0x44000C<span class="o">]</span> 
+004013E0  <span class="p">|</span>.  <span class="m">8945</span> E4       mov <span class="o">[</span>local.7<span class="o">]</span>,eax 
+004013E3  <span class="p">|</span>.  A1 <span class="m">10004400</span>   mov eax,dword ptr ds:<span class="o">[</span>0x440010<span class="o">]</span> 
+004013E8  <span class="p">|</span>.  <span class="m">8945</span> E8       mov <span class="o">[</span>local.6<span class="o">]</span>,eax 
+004013EB  <span class="p">|</span>.  A1 <span class="m">14004400</span>   mov eax,dword ptr ds:<span class="o">[</span>0x440014<span class="o">]</span> 
+004013F0  <span class="p">|</span>.  <span class="m">8945</span> C8       mov <span class="o">[</span>local.14<span class="o">]</span>,eax 
+004013F3  <span class="p">|</span>.  A1 <span class="m">18004400</span>   mov eax,dword ptr ds:<span class="o">[</span>0x440018<span class="o">]</span> 
+004013F8  <span class="p">|</span>.  <span class="m">8945</span> CC       mov <span class="o">[</span>local.13<span class="o">]</span>,eax 
+004013FB  <span class="p">|</span>.  0FB605 1C0044&gt;movzx eax,byte ptr ds:<span class="o">[</span>0x44001C<span class="o">]</span> 
+<span class="m">00401402</span>  <span class="p">|</span>.  <span class="m">8845</span> D0       mov byte ptr ss:<span class="o">[</span>ebp-0x30<span class="o">]</span>,al 
+<span class="m">00401405</span>  <span class="p">|</span>.  A1 1D004400   mov eax,dword ptr ds:<span class="o">[</span>0x44001D<span class="o">]</span> 
+0040140A  <span class="p">|</span>.  <span class="m">8945</span> B8       mov <span class="o">[</span>local.18<span class="o">]</span>,eax 
+0040140D  <span class="p">|</span>.  A1 <span class="m">21004400</span>   mov eax,dword ptr ds:<span class="o">[</span>0x440021<span class="o">]</span> 
+<span class="m">00401412</span>  <span class="p">|</span>.  <span class="m">8945</span> BC       mov <span class="o">[</span>local.17<span class="o">]</span>,eax 
+<span class="m">00401415</span>  <span class="p">|</span>.  0FB605 <span class="m">250044</span>&gt;movzx eax,byte ptr ds:<span class="o">[</span>0x440025<span class="o">]</span> 
+0040141C  <span class="p">|</span>.  <span class="m">8845</span> C0       mov byte ptr ss:<span class="o">[</span>ebp-0x40<span class="o">]</span>,al 
+0040141F  <span class="p">|</span>.  A1 <span class="m">26004400</span>   mov eax,dword ptr ds:<span class="o">[</span>0x440026<span class="o">]</span> 
+<span class="m">00401424</span>  <span class="p">|</span>.  <span class="m">8945</span> A8       mov <span class="o">[</span>local.22<span class="o">]</span>,eax 
+<span class="m">00401427</span>  <span class="p">|</span>.  0FB705 2A0044&gt;movzx eax,word ptr ds:<span class="o">[</span>0x44002A<span class="o">]</span> 
+0040142E  <span class="p">|</span>.  <span class="m">66</span>:8945 AC    mov word ptr ss:<span class="o">[</span>ebp-0x54<span class="o">]</span>,ax 
+<span class="m">00401432</span>  <span class="p">|</span>.  0FB605 2C0044&gt;movzx eax,byte ptr ds:<span class="o">[</span>0x44002C<span class="o">]</span> 
+<span class="m">00401439</span>  <span class="p">|</span>.  <span class="m">8845</span> AE       mov byte ptr ss:<span class="o">[</span>ebp-0x52<span class="o">]</span>,al 
+0040143C  <span class="p">|</span>.  A1 2D004400   mov eax,dword ptr ds:<span class="o">[</span>0x44002D<span class="o">]</span> 
+<span class="m">00401441</span>  <span class="p">|</span>.  <span class="m">8945</span> <span class="m">98</span>       mov <span class="o">[</span>local.26<span class="o">]</span>,eax 
+<span class="m">00401444</span>  <span class="p">|</span>.  A1 <span class="m">31004400</span>   mov eax,dword ptr ds:<span class="o">[</span>0x440031<span class="o">]</span> 
+<span class="m">00401449</span>  <span class="p">|</span>.  <span class="m">8945</span> 9C       mov <span class="o">[</span>local.25<span class="o">]</span>,eax 
+0040144C  <span class="p">|</span>.  0FB605 <span class="m">350044</span>&gt;movzx eax,byte ptr ds:<span class="o">[</span>0x440035<span class="o">]</span> 
+<span class="m">00401453</span>  <span class="p">|</span>.  <span class="m">8845</span> A0       mov byte ptr ss:<span class="o">[</span>ebp-0x60<span class="o">]</span>,al 
+<span class="m">00401456</span>  <span class="p">|</span>.  8D45 D8       lea eax,<span class="o">[</span>local.10<span class="o">]</span></code></pre></td></tr></table>
+</div>
+</div>
+<hr />
+
+<h2 id="下面是关键">下面是关键</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="m">00401459</span>  <span class="p">|</span>.  <span class="m">890424</span>        mov dword ptr ss:<span class="o">[</span>esp<span class="o">]</span>,eax 
+0040145C  <span class="p">|</span>.  E8 F5020000   call dumped.00401756                     <span class="p">;</span>  打印username 
+<span class="m">00401461</span>  <span class="p">|</span>.  8D45 C8       lea eax,<span class="o">[</span>local.14<span class="o">]</span> 
+<span class="m">00401464</span>  <span class="p">|</span>.  <span class="m">890424</span>        mov dword ptr ss:<span class="o">[</span>esp<span class="o">]</span>,eax 
+<span class="m">00401467</span>  <span class="p">|</span>.  E8 EA020000   call dumped.00401756                     <span class="p">;</span>  获取用户名 
+0040146C  <span class="p">|</span>.  8D85 78FFFFFF lea eax,<span class="o">[</span>local.34<span class="o">]</span> 
+<span class="m">00401472</span>  <span class="p">|</span>.  <span class="m">890424</span>        mov dword ptr ss:<span class="o">[</span>esp<span class="o">]</span>,eax 
+<span class="m">00401475</span>  <span class="p">|</span>.  E8 B4000000   call dumped.0040152E                     <span class="p">;</span>  变形 
+0040147A  <span class="p">|</span>.  8D45 B8       lea eax,<span class="o">[</span>local.18<span class="o">]</span> 
+0040147D  <span class="p">|</span>.  <span class="m">890424</span>        mov dword ptr ss:<span class="o">[</span>esp<span class="o">]</span>,eax 
+<span class="m">00401480</span>  <span class="p">|</span>.  E8 D1020000   call dumped.00401756                     <span class="p">;</span>  打印password 
+<span class="m">00401485</span>  <span class="p">|</span>.  8D85 48FFFFFF lea eax,<span class="o">[</span>local.46<span class="o">]</span>                       
+0040148B  <span class="p">|</span>.  <span class="m">890424</span>        mov dword ptr ss:<span class="o">[</span>esp<span class="o">]</span>,eax            
+0040148E  <span class="p">|</span>.  E8 0DF60000   call &lt;jmp.<span class="p">&amp;</span>msvcrt.gets&gt;                  <span class="p">;</span> <span class="se">\获</span>取密码 
+<span class="m">00401493</span>  <span class="p">|</span>.  8D85 38FFFFFF lea eax,<span class="o">[</span>local.50<span class="o">]</span> 
+<span class="m">00401499</span>  <span class="p">|</span>.  <span class="m">890424</span>        mov dword ptr ss:<span class="o">[</span>esp<span class="o">]</span>,eax 
+0040149C  <span class="p">|</span>.  E8 <span class="m">51020000</span>   call dumped.004016F2 
+004014A1  <span class="p">|</span>.  C785 34FFFFFF&gt;mov <span class="o">[</span>local.51<span class="o">]</span>,0x0 
+004014AB  <span class="p">|</span>&gt;  83BD 34FFFFFF&gt;/cmp <span class="o">[</span>local.51<span class="o">]</span>,0x9 
+004014B2  <span class="p">|</span>.  7F <span class="m">58</span>         <span class="p">|</span>jg Xdumped.0040150C  //跳想成功，如果爆破的话直接改这里就行了不过我们是分析算法，改这里不科学，你懂得</code></pre></td></tr></table>
+</div>
+</div>
+<hr />
+
+<h2 id="循环10次-从0到9所以是10次">循环10次，从0到9所以是10次</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="err">004014</span><span class="nf">B4</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">8</span><span class="no">D45</span> <span class="no">F8</span>       <span class="err">|</span><span class="no">lea</span> <span class="no">eax</span><span class="p">,[</span><span class="no">local.2</span><span class="p">]</span> 
+<span class="mi">004014</span><span class="no">B7</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">0385</span> <span class="mi">34</span><span class="no">FFFFFF</span> <span class="err">|</span><span class="no">add</span> <span class="no">eax</span><span class="p">,[</span><span class="no">local.51</span><span class="p">]</span> 
+<span class="mi">004014</span><span class="no">BD</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">2</span><span class="no">D</span> <span class="no">C0000000</span>   <span class="err">|</span><span class="no">sub</span> <span class="no">eax</span><span class="p">,</span><span class="mi">0xC0</span> 
+<span class="mi">004014</span><span class="no">C2</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">0</span><span class="no">FBE10</span>        <span class="err">|</span><span class="no">movsx</span> <span class="no">edx</span><span class="p">,</span><span class="no">byte</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="no">eax</span><span class="p">]</span>             <span class="c">;  关键 
+</span><span class="c"></span><span class="mi">004014</span><span class="no">C5</span>      <span class="mi">8</span><span class="no">D45</span> <span class="no">F8</span>       <span class="err">|</span><span class="no">lea</span> <span class="no">eax</span><span class="p">,</span><span class="no">dword</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">ebp-0x8</span><span class="p">]</span>         
+<span class="mi">004014</span><span class="no">C8</span>      <span class="mi">0385</span> <span class="mi">34</span><span class="no">FFFFFF</span> <span class="err">|</span><span class="no">add</span> <span class="no">eax</span><span class="p">,</span><span class="no">dword</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">ebp-0xCC</span><span class="p">]</span> 
+<span class="mi">004014</span><span class="no">CE</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">2</span><span class="no">D</span> <span class="no">B0000000</span>   <span class="err">|</span><span class="no">sub</span> <span class="no">eax</span><span class="p">,</span><span class="mi">0xB0</span> 
+<span class="mi">004014</span><span class="no">D3</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">0</span><span class="no">FBE00</span>        <span class="err">|</span><span class="no">movsx</span> <span class="no">eax</span><span class="p">,</span><span class="no">byte</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="no">eax</span><span class="p">]</span>             <span class="c">;  取密码一位的hex 
+</span><span class="c"></span><span class="mi">004014</span><span class="no">D6</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">31</span><span class="no">C2</span>          <span class="err">|</span><span class="no">xor</span> <span class="no">edx</span><span class="p">,</span><span class="no">eax</span> 
+<span class="mi">004014</span><span class="no">D8</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">8</span><span class="no">D45</span> <span class="no">F8</span>       <span class="err">|</span><span class="no">lea</span> <span class="no">eax</span><span class="p">,[</span><span class="no">local.2</span><span class="p">]</span> 
+<span class="mi">004014</span><span class="no">DB</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">0385</span> <span class="mi">34</span><span class="no">FFFFFF</span> <span class="err">|</span><span class="no">add</span> <span class="no">eax</span><span class="p">,[</span><span class="no">local.51</span><span class="p">]</span> 
+<span class="mi">004014</span><span class="no">E1</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">83</span><span class="no">C0</span> <span class="mi">80</span>       <span class="err">|</span><span class="no">add</span> <span class="no">eax</span><span class="p">,-</span><span class="mi">0x80</span> 
+<span class="mi">004014</span><span class="no">E4</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">0</span><span class="no">FBE00</span>        <span class="err">|</span><span class="no">movsx</span> <span class="no">eax</span><span class="p">,</span><span class="no">byte</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="no">eax</span><span class="p">]</span>             <span class="c">;  取变形码的一位hex 
+</span><span class="c"></span><span class="mi">004014</span><span class="no">E7</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">39</span><span class="no">C2</span>          <span class="err">|</span><span class="no">cmp</span> <span class="no">edx</span><span class="p">,</span><span class="no">eax</span>                             
+<span class="mi">004014</span><span class="no">E9</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">74</span> <span class="mi">17</span>         <span class="err">|</span><span class="no">je</span> <span class="no">Xdumped.00401502</span> <span class="err">//每次这个</span><span class="no">je必须要跳</span><span class="err">，否则向下就失败了</span> 
+<span class="mi">004014</span><span class="no">EB</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">8</span><span class="no">D45</span> <span class="no">A8</span>       <span class="err">|</span><span class="no">lea</span> <span class="no">eax</span><span class="p">,[</span><span class="no">local.22</span><span class="p">]</span> 
+<span class="mi">004014</span><span class="no">EE</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">890424</span>        <span class="err">|</span><span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">esp</span><span class="p">],</span><span class="no">eax</span> 
+<span class="mi">004014</span><span class="no">F1</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">E8</span> <span class="mi">60020000</span>   <span class="err">|</span><span class="no">call</span> <span class="no">dumped.00401756</span> 
+<span class="mi">004014</span><span class="no">F6</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">C785</span> <span class="mi">30</span><span class="no">FFFFFF</span><span class="err">&gt;|</span><span class="no">mov</span> <span class="p">[</span><span class="no">local.52</span><span class="p">],</span><span class="mi">0x0</span> 
+<span class="mi">00401500</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">EB</span> <span class="mi">24</span>         <span class="err">|</span><span class="no">jmp</span> <span class="no">Xdumped.00401526</span>  <span class="err">//注意这个跳，跳了就失败</span> 
+<span class="mi">00401502</span>  <span class="err">|&gt;</span>  <span class="mi">8</span><span class="no">D85</span> <span class="mi">34</span><span class="no">FFFFFF</span> <span class="err">|</span><span class="no">lea</span> <span class="no">eax</span><span class="p">,[</span><span class="no">local.51</span><span class="p">]</span> 
+<span class="mi">00401508</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">FF00</span>          <span class="err">|</span><span class="no">inc</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="no">eax</span><span class="p">]</span> 
+<span class="mi">0040150</span><span class="no">A</span>  <span class="err">|</span><span class="p">.</span><span class="err">^</span> <span class="no">EB</span> <span class="mi">9</span><span class="no">F</span>         <span class="err">\</span><span class="no">jmp</span> <span class="no">Xdumped.004014AB</span> 
+<span class="mi">0040150</span><span class="no">C</span>  <span class="err">|&gt;</span>  <span class="mi">8</span><span class="no">D45</span> <span class="mi">98</span>       <span class="no">lea</span> <span class="no">eax</span><span class="p">,[</span><span class="no">local.26</span><span class="p">]</span> 
+<span class="mi">0040150</span><span class="no">F</span>  <span class="err">|</span><span class="p">.</span>  <span class="mi">890424</span>        <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">esp</span><span class="p">],</span><span class="no">eax</span>
+<span class="err">00401512</span>  <span class="err">|.</span>  <span class="nf">E8</span> <span class="mi">3</span><span class="no">F020000</span>   <span class="no">call</span> <span class="no">dumped.00401756</span> 
+<span class="mi">00401517</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">E8</span> <span class="mi">44</span><span class="no">D20000</span>   <span class="no">call</span> <span class="err">&lt;</span><span class="no">jmp.</span><span class="err">&amp;</span><span class="no">msvcrt._getch</span><span class="err">&gt;</span>                <span class="err">;</span> <span class="p">[</span><span class="no">_getch</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="上面这俩句直接显示success成功">上面这俩句直接显示success成功</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-asm" data-lang="asm"><span class="err">0040151</span><span class="nf">C</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">C785</span> <span class="mi">30</span><span class="no">FFFFFF</span><span class="err">&gt;</span><span class="no">mov</span> <span class="p">[</span><span class="no">local.52</span><span class="p">],</span><span class="mi">0x0</span> 
+<span class="mi">00401526</span>  <span class="err">|&gt;</span>  <span class="mi">8</span><span class="no">B85</span> <span class="mi">30</span><span class="no">FFFFFF</span> <span class="no">mov</span> <span class="no">eax</span><span class="p">,[</span><span class="no">local.52</span><span class="p">]</span> 
+<span class="mi">0040152</span><span class="no">C</span>  <span class="err">|</span><span class="p">.</span>  <span class="no">C9</span>            <span class="no">leave</span> 
+<span class="mi">0040152</span><span class="no">D</span>  <span class="err">\</span><span class="p">.</span>  <span class="no">C3</span>            <span class="no">retn</span> </code></pre></td></tr></table>
+</div>
+</div>
+<hr />
+
+<p><div class='align-center'>
+  <p><img src="3.jpg" alt="img" title="jpg" /></p>
+
+</div>
+这个是透明的cmd下测试的：
+<div class='align-center'>
+  <p><img src="4.jpg" alt="img" title="jpg" /></p>
+
+</div></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">KoU2N</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2013-05-18</span>
+  </p>
+  
+  
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/crackme/">crackme</a>
+          <a href="/tags/windows%E9%80%86%E5%90%91/">windows逆向</a>
+          <a href="/tags/win32console/">win32console</a>
+          <a href="/tags/%E8%A5%BF%E7%94%B5%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B/">西电网络攻防大赛</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%BA%8C%E5%85%B3/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">西电第三届网络攻防大赛线上赛缓冲区溢出题目第二关</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%A0%B4%E8%A7%A3%E9%A2%98%E7%9B%AE%E7%AC%AC%E4%B8%89%E5%85%B3/">
+            <span class="next-text nav-default">西电第三届网络攻防大赛线上赛破解题目第三关</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:gao_yun@.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/kouunn" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://kou2n.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">KoU2N</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

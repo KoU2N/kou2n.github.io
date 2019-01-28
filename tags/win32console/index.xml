@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>win32console on KoU2N‘s BLOG</title>
+    <link>https://kou2n.github.io/tags/win32console/</link>
+    <description>Recent content in win32console on KoU2N‘s BLOG</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 18 May 2013 19:53:21 +0000</lastBuildDate>
+    
+	<atom:link href="https://kou2n.github.io/tags/win32console/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>西电第三届网络攻防大赛线上赛破解题目第四关</title>
+      <link>https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%A0%B4%E8%A7%A3%E9%A2%98%E7%9B%AE%E7%AC%AC%E5%9B%9B%E5%85%B3/</link>
+      <pubDate>Sat, 18 May 2013 19:53:21 +0000</pubDate>
+      
+      <guid>https://kou2n.github.io/post/%E8%A5%BF%E7%94%B5%E7%AC%AC%E4%B8%89%E5%B1%8A%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2%E5%A4%A7%E8%B5%9B%E7%BA%BF%E4%B8%8A%E8%B5%9B%E7%A0%B4%E8%A7%A3%E9%A2%98%E7%9B%AE%E7%AC%AC%E5%9B%9B%E5%85%B3/</guid>
+      <description>好久没搞cm了，接着上次西电的破解题目，第三题没啥技术含量，突破一个按钮就ok，直接搞第4题，废话不多说。 目标程序，是一个cmd的控制台应用</description>
+    </item>
+    
+  </channel>
+</rss>

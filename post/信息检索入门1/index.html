@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>信息检索入门1 - KoU2N‘s BLOG</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="KoU2N" /><meta name="description" content="介绍 学了几个月机器学习，刚知道门儿在哪。感觉学习最难的是思维方式的转变。之前写程序就是把自己的逻辑和工程的逻辑用高级语言来描述给计算机，让它" /><meta name="keywords" content="KoU2N, blog, KoU2N" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.53 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://kou2n.github.io/post/%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E5%85%A5%E9%97%A81/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="信息检索入门1" />
+<meta property="og:description" content="介绍 学了几个月机器学习，刚知道门儿在哪。感觉学习最难的是思维方式的转变。之前写程序就是把自己的逻辑和工程的逻辑用高级语言来描述给计算机，让它" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kou2n.github.io/post/%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E5%85%A5%E9%97%A81/" /><meta property="article:published_time" content="2018-08-20T18:48:56&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-20T18:48:56&#43;00:00"/>
+
+<meta itemprop="name" content="信息检索入门1">
+<meta itemprop="description" content="介绍 学了几个月机器学习，刚知道门儿在哪。感觉学习最难的是思维方式的转变。之前写程序就是把自己的逻辑和工程的逻辑用高级语言来描述给计算机，让它">
+
+
+<meta itemprop="datePublished" content="2018-08-20T18:48:56&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-20T18:48:56&#43;00:00" />
+<meta itemprop="wordCount" content="1229">
+
+
+
+<meta itemprop="keywords" content="信息检索," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="信息检索入门1"/>
+<meta name="twitter:description" content="介绍 学了几个月机器学习，刚知道门儿在哪。感觉学习最难的是思维方式的转变。之前写程序就是把自己的逻辑和工程的逻辑用高级语言来描述给计算机，让它"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">KoU2N</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">KoU2N</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">信息检索入门1</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-20 </span>
+        <div class="post-category">
+            <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"> 人工智能 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#介绍">介绍</a></li>
+<li><a href="#什么是信息检索">什么是信息检索</a></li>
+<li><a href="#架构">架构</a></li>
+<li><a href="#实战">实战</a>
+<ul>
+<li><a href="#最简单的信息检索问题">最简单的信息检索问题</a></li>
+<li><a href="#大多数文档都有多个单词">大多数文档都有多个单词</a></li>
+<li><a href="#倒排索引-inverted-index">倒排索引（Inverted Index）</a></li>
+<li><a href="#构建索引">构建索引</a></li>
+<li><a href="#查询处理">查询处理</a></li>
+<li><a href="#调查结果">调查结果</a>
+<ul>
+<li><a href="#统计一个txt文档并绘制柱状图">统计一个txt文档并绘制柱状图</a></li>
+<li><a href="#读取文件">读取文件</a></li>
+<li><a href="#画图">画图</a></li>
+<li><a href="#统计最后一列的句子中出现单个单词的词频">统计最后一列的句子中出现单个单词的词频</a></li>
+<li><a href="#统计2个单词所组成的单词短语的出现次数">统计2个单词所组成的单词短语的出现次数</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<div class='align-center'>
+  <p><img src="0.jpg" alt="img" title="jpg" /></p>
+
+</div>
+
+<h1 id="介绍">介绍</h1>
+
+<p>学了几个月机器学习，刚知道门儿在哪。感觉学习最难的是思维方式的转变。之前写程序就是把自己的逻辑和工程的逻辑用高级语言来描述给计算机，让它以这种固定的方式来运转。逆向工程的话，在没有源码的情况下，区分命令和数据的边界，分析加密解密流程，对核心数据进行位置定位。然而机器学习是给你数据，让你教机器去自己创造自己的逻辑，然后把机器的逻辑再加以利用。主要是训练数据提取的特征维度过高，对于逆向人员来说是不存在什么黑盒的。英语和数学是硬伤，得好好提高。
+这个转换目前让我不是很适应，可能还是因为转换新领域，都说隔行如隔山，我感觉搞it的去切换一个细分领域也没那么容易，继续学吧。现在机器学习一手的资料都是英文的，更细的领域只能靠看论文学习，博客和csdn之类都是互相转载，干货不多。目前计划的研究方向是信息检索（Information Retrieval）。所以写这个系列文章，也算是我的一个学习笔记，应该会有20几篇。
+我参考的教程是Illinois Institute of Technology大学的，英语好的也可以直接看这里：
+<a href="https://github.com/iit-cs429/main">https://github.com/iit-cs429/main</a>
+<!-- more --></p>
+
+<h1 id="什么是信息检索">什么是信息检索</h1>
+
+<p>顾名思义，举一些实例，所有的搜索引擎百度谷歌之类，还有操作系统里面的搜索文件的功能等等。
+information retrieval: the process of finding relevant data。这个解释很好。</p>
+
+<h1 id="架构">架构</h1>
+
+<p><div class='align-center'>
+  <p><img src="1.png" alt="img" title="png" /></p>
+
+</div>
+图片来自《信息检索中文导论》
+<div class='align-center'>
+  <p><img src="2.png" alt="img" title="png" /></p>
+
+</div></p>
+
+<h1 id="实战">实战</h1>
+
+<h2 id="最简单的信息检索问题">最简单的信息检索问题</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span> <span class="k">if</span> <span class="n">doc</span> <span class="o">==</span> <span class="n">query</span><span class="p">]</span>
+<span class="c1">#search2和search等价</span>
+<span class="k">def</span> <span class="nf">search2</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">doc</span> <span class="o">==</span> <span class="n">query</span><span class="p">:</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+<span class="n">documents</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dog&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;zebra&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">]</span>    
+<span class="k">print</span><span class="p">(</span><span class="n">search</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">))</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>输出：
+[&lsquo;cat&rsquo;, &lsquo;cat&rsquo;]</p>
+</blockquote>
+
+<h2 id="大多数文档都有多个单词">大多数文档都有多个单词</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">documents</span> <span class="k">if</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">]</span>
+
+<span class="n">documents</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;dog&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;zebra&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;dog&#39;</span><span class="p">,</span> <span class="s1">&#39;puma&#39;</span><span class="p">]]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">search</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">))</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>输出：
+[[&lsquo;dog&rsquo;, &lsquo;cat&rsquo;], [&lsquo;cat&rsquo;, &lsquo;zebra&rsquo;]]</p>
+
+<h2 id="倒排索引-inverted-index">倒排索引（Inverted Index）</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 将每个单词映射到包含它的文档的索引列表</span>
+<span class="n">index</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;dog&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+         <span class="s1">&#39;cat&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>  <span class="c1"># IDs are sorted. Why?</span>
+         <span class="s1">&#39;zebra&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+         <span class="s1">&#39;puma&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">]}</span>
+<span class="c1"># 之前定义的文档集: </span>
+<span class="c1"># documents = [[&#39;dog&#39;, &#39;cat&#39;], [&#39;cat&#39;, &#39;zebra&#39;], [&#39;dog&#39;, &#39;puma&#39;]]</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>输出：
+[0, 2]</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">indexed_search</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">documents</span><span class="p">[</span><span class="n">doc_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc_id</span> <span class="ow">in</span> <span class="n">index</span><span class="p">[</span><span class="n">query</span><span class="p">]]</span>
+<span class="n">printprint</span><span class="p">((</span><span class="n">indexed_searchindexed_</span> <span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">))</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>输出：
+[[&lsquo;dog&rsquo;, &lsquo;cat&rsquo;], [&lsquo;cat&rsquo;, &lsquo;zebra&rsquo;]]</p>
+
+<h2 id="构建索引">构建索引</h2>
+
+<p><div class='align-center'>
+  <p><img src="3.png" alt="img" title="png" /></p>
+
+</div>
+把原文的的标点去掉-&gt;分成独立的单词-&gt;全部转换成小写-&gt;
+统计每个词在第几个文档中出现过,记录对应的文档号</p>
+</blockquote>
+
+<h2 id="查询处理">查询处理</h2>
+
+<p>大多数查询都是多个词</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">and_search</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">queries</span><span class="p">):</span>
+    <span class="n">doc_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">queries</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span> <span class="c1"># For remaining words in query</span>
+        <span class="n">doc_ids</span> <span class="o">&amp;=</span> <span class="nb">set</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">query</span><span class="p">])</span> <span class="c1"># Set intersection</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">documents</span><span class="p">[</span><span class="n">doc_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc_id</span> <span class="ow">in</span> <span class="n">doc_ids</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">and_search</span><span class="p">(</span><span class="n">documents</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="s1">&#39;dog&#39;</span><span class="p">]))</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="调查结果">调查结果</h2>
+
+<h3 id="统计一个txt文档并绘制柱状图">统计一个txt文档并绘制柱状图</h3>
+
+<p>文档结构如下（tab分割，横线是tab）：
+<div class='align-center'>
+  <p><img src="4.png" alt="img" title="png" /></p>
+
+</div></p>
+
+<blockquote>
+<p>7，8，9列代表的内容如下(每列对应数字1~5代表熟悉程度)：<br />
+- &lsquo;How familiar are you with version control? (git, svn, mercurial, cvs, etc.)&rsquo;<br />
+- &lsquo;How familiar are you with Python?&rsquo;<br />
+- &lsquo;Have you taken a course on Machine Learning or Data Mining?&rsquo;</p>
+</blockquote>
+
+<h3 id="读取文件">读取文件</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># survey.txt contains tab-separated survey results.</span>
+<span class="n">survey</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;survey.txt&#39;</span><span class="p">)]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">survey</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="画图">画图</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">importimport</span>  <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplotmatplotl</span>  <span class="k">as</span> <span class="n">plt</span> <span class="c1"># a plotting library</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>  <span class="c1"># A dict for counting.</span>
+
+<span class="k">def</span> <span class="nf">plot_results_for_column</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="n">colidx</span><span class="p">):</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">colidx</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">survey</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">counts</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)),</span> <span class="p">[</span><span class="n">counts</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">],</span> <span class="n">width</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">counts</span><span class="p">)),</span> <span class="n">keys</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">survey</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">colidx</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;frequency&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">plot_results_for_column</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<div class='align-center'>
+  <p><img src="5.png" alt="img" title="png" /></p>
+
+</div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">plot_results_for_column</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<div class='align-center'>
+  <p><img src="6.png" alt="img" title="png" /></p>
+
+</div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">plot_results_for_column</span><span class="p">(</span><span class="n">survey</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<div class='align-center'>
+  <p><img src="7.png" alt="img" title="png" /></p>
+
+</div>
+
+<h3 id="统计最后一列的句子中出现单个单词的词频">统计最后一列的句子中出现单个单词的词频</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># Count terms in responses to &#34;Why are you taking this course?&#34;</span>
+<span class="n">term_counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">survey</span><span class="p">:</span>
+    <span class="n">term_counts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+<span class="n">term_counts</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>输出：
+[(&lsquo;anon&rsquo;, 148), (&lsquo;i&rsquo;, 2), (&lsquo;like&rsquo;, 1), (&lsquo;ml&rsquo;, 1), (&lsquo;it&rsquo;, 1), (&lsquo;to&rsquo;, 1), (&lsquo;want&rsquo;, 1), (&lsquo;learn&rsquo;, 1)]</p>
+
+<h3 id="统计2个单词所组成的单词短语的出现次数">统计2个单词所组成的单词短语的出现次数</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># Count 2-word phrases (bigrams) in responses to &#34;Why are you taking this course?&#34;# Count  </span>
+<span class="n">term_counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">survey</span><span class="p">:</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">term_counts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">words</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">words</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+<span class="n">term_counts</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>输出：
+[((&lsquo;anon&rsquo;, &lsquo;anon&rsquo;), 74), ((&lsquo;i&rsquo;, &lsquo;want&rsquo;), 1), ((&lsquo;want&rsquo;, &lsquo;to&rsquo;), 1), ((&lsquo;like&rsquo;, &lsquo;it&rsquo;), 1), ((&lsquo;learn&rsquo;, &lsquo;ml&rsquo;), 1), ((&lsquo;to&rsquo;, &lsquo;learn&rsquo;), 1), ((&lsquo;i&rsquo;, &lsquo;like&rsquo;), 1)]</p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">KoU2N</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-20</span>
+  </p>
+  
+  
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2/">信息检索</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E5%85%A5%E9%97%A82/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">信息检索入门2</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/%E4%BB%8E%E9%9B%B6%E5%AD%A6ai/">
+            <span class="next-text nav-default">从零学AI</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:gao_yun@.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/kouunn" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://kou2n.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">KoU2N</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

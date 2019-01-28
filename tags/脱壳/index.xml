@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>脱壳 on KoU2N‘s BLOG</title>
+    <link>https://kou2n.github.io/tags/%E8%84%B1%E5%A3%B3/</link>
+    <description>Recent content in 脱壳 on KoU2N‘s BLOG</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 22 Oct 2012 22:33:53 +0000</lastBuildDate>
+    
+	<atom:link href="https://kou2n.github.io/tags/%E8%84%B1%E5%A3%B3/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Themida2.X的脱壳方法</title>
+      <link>https://kou2n.github.io/post/themida2-x%E7%9A%84%E8%84%B1%E5%A3%B3%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Mon, 22 Oct 2012 22:33:53 +0000</pubDate>
+      
+      <guid>https://kou2n.github.io/post/themida2-x%E7%9A%84%E8%84%B1%E5%A3%B3%E6%96%B9%E6%B3%95/</guid>
+      <description>某外挂，PEID扫一下，啥也没有 一共6个区段，最后俩个随机填充区段。 一开始以为是vc++6.0，后来找到了FF 55 FC 5F 5E特征码，才知道是易语</description>
+    </item>
+    
+    <item>
+      <title>5种语言的区段信息</title>
+      <link>https://kou2n.github.io/post/5%E7%A7%8D%E8%AF%AD%E8%A8%80%E7%9A%84%E5%8C%BA%E6%AE%B5%E4%BF%A1%E6%81%AF/</link>
+      <pubDate>Fri, 12 Oct 2012 22:46:56 +0000</pubDate>
+      
+      <guid>https://kou2n.github.io/post/5%E7%A7%8D%E8%AF%AD%E8%A8%80%E7%9A%84%E5%8C%BA%E6%AE%B5%E4%BF%A1%E6%81%AF/</guid>
+      <description>asm BC++ Delphi vb vc++ MFC 名词解释 VOffset:虚拟地址 VSize:虚拟大小 ROffset:实际地址 除了delphi外其他程序的第一段都是.text段，</description>
+    </item>
+    
+    <item>
+      <title>七种脱壳方法总结</title>
+      <link>https://kou2n.github.io/post/%E4%B8%83%E7%A7%8D%E8%84%B1%E5%A3%B3%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Wed, 25 Jan 2012 22:50:16 +0000</pubDate>
+      
+      <guid>https://kou2n.github.io/post/%E4%B8%83%E7%A7%8D%E8%84%B1%E5%A3%B3%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/</guid>
+      <description>单步跟踪法 1.OD载入，不分析代码。 2.近CALL—F7，远CALL—F8，实现向下的跳转。 3.有回跳处，下一句代码处—F4 （右键—代码断点</description>
+    </item>
+    
+  </channel>
+</rss>

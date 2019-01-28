@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on KoU2N‘s BLOG</title>
+    <link>https://kou2n.github.io/categories/</link>
+    <description>Recent content in Categories on KoU2N‘s BLOG</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    
+	<atom:link href="https://kou2n.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>人工智能</title>
+      <link>https://kou2n.github.io/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/</link>
+      <pubDate>Thu, 24 Jan 2019 17:48:54 +0000</pubDate>
+      
+      <guid>https://kou2n.github.io/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>信息安全</title>
+      <link>https://kou2n.github.io/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/</link>
+      <pubDate>Tue, 21 May 2013 16:20:22 +0000</pubDate>
+      
+      <guid>https://kou2n.github.io/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>论文</title>
+      <link>https://kou2n.github.io/categories/%E8%AE%BA%E6%96%87/</link>
+      <pubDate>Thu, 24 Jan 2019 17:48:54 +0000</pubDate>
+      
+      <guid>https://kou2n.github.io/categories/%E8%AE%BA%E6%96%87/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

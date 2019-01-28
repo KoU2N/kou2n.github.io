@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>信息检索入门2 - KoU2N‘s BLOG</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="KoU2N" /><meta name="description" content="介绍 这是第二篇，主要介绍一些nlp的知识。 索引管道（Indexing Pipeline） 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 # 1. Collect documents. document = &amp;#34;he didn&amp;#39;t know where he" /><meta name="keywords" content="KoU2N, blog, KoU2N" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.53 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://kou2n.github.io/post/%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E5%85%A5%E9%97%A82/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="信息检索入门2" />
+<meta property="og:description" content="介绍 这是第二篇，主要介绍一些nlp的知识。 索引管道（Indexing Pipeline） 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 # 1. Collect documents. document = &#34;he didn&#39;t know where he" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kou2n.github.io/post/%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E5%85%A5%E9%97%A82/" /><meta property="article:published_time" content="2018-08-22T23:26:20&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-22T23:26:20&#43;00:00"/>
+
+<meta itemprop="name" content="信息检索入门2">
+<meta itemprop="description" content="介绍 这是第二篇，主要介绍一些nlp的知识。 索引管道（Indexing Pipeline） 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 # 1. Collect documents. document = &#34;he didn&#39;t know where he">
+
+
+<meta itemprop="datePublished" content="2018-08-22T23:26:20&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-22T23:26:20&#43;00:00" />
+<meta itemprop="wordCount" content="1275">
+
+
+
+<meta itemprop="keywords" content="信息检索," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="信息检索入门2"/>
+<meta name="twitter:description" content="介绍 这是第二篇，主要介绍一些nlp的知识。 索引管道（Indexing Pipeline） 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 # 1. Collect documents. document = &#34;he didn&#39;t know where he"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">KoU2N</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">KoU2N</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">信息检索入门2</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-22 </span>
+        <div class="post-category">
+            <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"> 人工智能 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#介绍">介绍</a></li>
+<li><a href="#索引管道-indexing-pipeline">索引管道（Indexing Pipeline）</a></li>
+<li><a href="#符号化-tokenization">符号化（Tokenization）</a>
+<ul>
+<li><a href="#复合名词-compound-nouns">复合名词（Compound Nouns）</a></li>
+<li><a href="#分割-segmentation">分割（Segmentation）</a></li>
+<li><a href="#标点-punctuation">标点（Punctuation）</a></li>
+<li><a href="#正则表达式-regular-expressions">正则表达式（Regular Expressions）</a></li>
+</ul></li>
+<li><a href="#标准化-normalization">标准化（Normalization）</a>
+<ul>
+<li><a href="#停用词-stop-words">停用词（Stop words）</a></li>
+<li><a href="#口音-变音符号-accents-diacritics">口音/变音符号（Accents/Diacritics）</a></li>
+<li><a href="#case">Case</a></li>
+<li><a href="#词干-lemmatizing-stemming-lemmatizing">词干/ Lemmatizing（Stemming / Lemmatizing）</a>
+<ul>
+<li><a href="#形态学-morphology">形态学(morphology)</a></li>
+<li><a href="#stem">stem</a></li>
+<li><a href="#lemmatize">lemmatize</a></li>
+<li><a href="#simple-stemmer">Simple stemmer</a></li>
+<li><a href="#stemming-errors">Stemming Errors</a></li>
+<li><a href="#porter-stemmer">Porter Stemmer</a></li>
+<li><a href="#wordnet-lemmatize">WordNet Lemmatize</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<div class='align-center'>
+  <p><img src="0.jpg" alt="img" title="jpg" /></p>
+
+</div>
+
+<h1 id="介绍">介绍</h1>
+
+<p>这是第二篇，主要介绍一些nlp的知识。
+<!-- more --></p>
+
+<h1 id="索引管道-indexing-pipeline">索引管道（Indexing Pipeline）</h1>
+
+<div class='align-center'>
+  <p><img src="1.png" alt="img" title="png" /></p>
+
+</div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># 1. Collect documents.</span>
+<span class="n">document</span> <span class="o">=</span> <span class="s2">&#34;he didn&#39;t know where he worked.&#34;</span>
+
+<span class="c1"># 2. Tokenize</span>
+<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;he&#34;</span><span class="p">,</span> <span class="s2">&#34;didn&#39;t&#34;</span><span class="p">,</span> <span class="s2">&#34;know&#34;</span><span class="p">,</span> <span class="s2">&#34;where&#34;</span><span class="p">,</span> <span class="s2">&#34;he&#34;</span><span class="p">,</span> <span class="s2">&#34;worked&#34;</span><span class="p">]</span> <span class="c1"># split; remove punctuation</span>
+<span class="n">types</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;he&#34;</span><span class="p">,</span> <span class="s2">&#34;didn&#39;t&#34;</span><span class="p">,</span> <span class="s2">&#34;know&#34;</span><span class="p">,</span> <span class="s2">&#34;where&#34;</span><span class="p">,</span> <span class="s2">&#34;worked&#34;</span><span class="p">]</span> <span class="c1"># unique tokens.</span>
+
+<span class="c1"># 3. Normalize</span>
+<span class="c1"># remove common words like &#39;where&#39;; collapse word forms like worked -&gt; work</span>
+<span class="n">terms</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;he&#34;</span><span class="p">,</span> <span class="s2">&#34;didnt&#34;</span><span class="p">,</span> <span class="s2">&#34;know&#34;</span><span class="p">,</span> <span class="s2">&#34;work&#34;</span><span class="p">]</span>
+
+<span class="c1"># 4. Index</span>
+<span class="n">index</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;he&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+         <span class="s1">&#39;didnt&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+         <span class="s1">&#39;know&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+         <span class="s1">&#39;work&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],}</span></code></pre></td></tr></table>
+</div>
+</div>
+<h1 id="符号化-tokenization">符号化（Tokenization）</h1>
+
+<p>将文档拆分为标记的过程。
+python的split()函数：
+&gt;str.split(str=&ldquo;&rdquo;, num=string.count(str))
+str &ndash; 分隔符，默认为所有的空字符，包括空格、换行(\n)、制表符(\t)等。
+num &ndash; 分割次数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">split</span><span class="p">())</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>[&lsquo;he&rsquo;, &ldquo;didn&rsquo;t&rdquo;, &lsquo;know&rsquo;, &lsquo;where&rsquo;, &lsquo;he&rsquo;, &lsquo;worked.&rsquo;]</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">split</span><span class="p">())</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>[&lsquo;what&rsquo;, &lsquo;about&rsquo;, &lsquo;multiple&rsquo;, &lsquo;spaces?&rsquo;]</p>
+
+<h2 id="复合名词-compound-nouns">复合名词（Compound Nouns）</h2>
+
+<h2 id="分割-segmentation">分割（Segmentation）</h2>
+
+<p>用于分割的统计分类算法
+n-grams语言模型(index character subsequences)</p>
+
+<h2 id="标点-punctuation">标点（Punctuation）</h2>
+
+<p>删除所有标点符号</p>
+
+<h2 id="正则表达式-regular-expressions">正则表达式（Regular Expressions）</h2>
+
+<div class='align-center'>
+  <p><img src="2.png" alt="img" title="png" /></p>
+
+</div>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1">#引入正则模块以x分割字符串</span>
+<span class="kn">import</span> <span class="nn">re</span>  <span class="c1"># Regular expression module</span>
+<span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;axbxc&#39;</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>[&lsquo;a&rsquo;, &lsquo;b&rsquo;, &lsquo;c&rsquo;]</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;x+&#39;</span><span class="p">,</span> <span class="s1">&#39;axxxxbxxxxc&#39;</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>[&lsquo;a&rsquo;, &lsquo;b&rsquo;, &lsquo;c&rsquo;]</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;axxxxbxxxxc&#39;</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>[&lsquo;a&rsquo;, &ldquo;, &ldquo;, &ldquo;, &lsquo;b&rsquo;, &ldquo;, &ldquo;, &ldquo;, &lsquo;c&rsquo;]</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;\+\+&#39;</span><span class="p">,</span> <span class="s1">&#39;hi+++there&#39;</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;([\W\s]|t)&#39;</span><span class="p">,</span> <span class="s2">&#34;what&#39;s up?&#34;</span><span class="p">))</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>[&lsquo;hi&rsquo;, &lsquo;+there&rsquo;]
+[&lsquo;wha&rsquo;, &rsquo;t&rsquo;, &ldquo;, &ldquo;&lsquo;&rdquo;, &rsquo;s&rsquo;, &lsquo; &lsquo;, &lsquo;up&rsquo;, &lsquo;?&rsquo;, &ldquo;]</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">text</span> <span class="o">=</span> <span class="s2">&#34;A first-class ticket to the U.S.A. isn&#39;t expensive?&#34;</span>
+<span class="k">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;\W+&#39;</span><span class="p">,</span>  <span class="n">text</span><span class="p">))</span> <span class="c1"># \W=not a word character; +=1 or more</span>
+<span class="k">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;\w+&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span> <span class="c1"># \w=a word character [a-zA-Z0-9_]</span>
+<span class="c1"># group punctuation with following letters</span>
+<span class="k">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;\w+|\S\w*&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span>  <span class="c1"># \S=not a space; |=OR</span>
+<span class="k">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&#34;\w+(?:[-&#39;]\w+)*|[-.(]+|\S\w*&#34;</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span><span class="c1"># (?: specifies what to match, not what to capture</span>
+<span class="k">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&#34;(?:[A-Z]\.)+|\w+(?:[-&#39;]\w+)*|[-.(]+|\S\w*&#34;</span><span class="p">,</span> <span class="n">text</span><span class="p">))</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>[&lsquo;A&rsquo;, &lsquo;first-class&rsquo;, &lsquo;ticket&rsquo;, &lsquo;to&rsquo;, &lsquo;the&rsquo;, &lsquo;U.S.A.&rsquo;, &ldquo;isn&rsquo;t&rdquo;, &lsquo;expensive?&rsquo;]
+[&lsquo;A&rsquo;, &lsquo;first&rsquo;, &lsquo;class&rsquo;, &lsquo;ticket&rsquo;, &lsquo;to&rsquo;, &lsquo;the&rsquo;, &lsquo;U&rsquo;, &rsquo;S&rsquo;, &lsquo;A&rsquo;, &lsquo;isn&rsquo;, &rsquo;t&rsquo;, &lsquo;expensive&rsquo;, &ldquo;]
+[&lsquo;A&rsquo;, &lsquo;first&rsquo;, &lsquo;class&rsquo;, &lsquo;ticket&rsquo;, &lsquo;to&rsquo;, &lsquo;the&rsquo;, &lsquo;U&rsquo;, &rsquo;S&rsquo;, &lsquo;A&rsquo;, &lsquo;isn&rsquo;, &rsquo;t&rsquo;, &lsquo;expensive&rsquo;]
+[&lsquo;A&rsquo;, &lsquo;first&rsquo;, &lsquo;-class&rsquo;, &lsquo;ticket&rsquo;, &lsquo;to&rsquo;, &lsquo;the&rsquo;, &lsquo;U&rsquo;, &lsquo;.S&rsquo;, &lsquo;.A&rsquo;, &lsquo;.&rsquo;, &lsquo;isn&rsquo;, &ldquo;&rsquo;t&rdquo;, &lsquo;expensive&rsquo;, &lsquo;?&rsquo;]
+[&lsquo;A&rsquo;, &lsquo;first-class&rsquo;, &lsquo;ticket&rsquo;, &lsquo;to&rsquo;, &lsquo;the&rsquo;, &lsquo;U&rsquo;, &lsquo;.&rsquo;, &rsquo;S&rsquo;, &lsquo;.&rsquo;, &lsquo;A&rsquo;, &lsquo;.&rsquo;, &ldquo;isn&rsquo;t&rdquo;, &lsquo;expensive&rsquo;, &lsquo;?&rsquo;]
+[&lsquo;A&rsquo;, &lsquo;first-class&rsquo;, &lsquo;ticket&rsquo;, &lsquo;to&rsquo;, &lsquo;the&rsquo;, &lsquo;U.S.A.&rsquo;, &ldquo;isn&rsquo;t&rdquo;, &lsquo;expensive&rsquo;, &lsquo;?&rsquo;]</p>
+</blockquote>
+
+<h1 id="标准化-normalization">标准化（Normalization）</h1>
+
+<p>将type聚类为词项的过程。
+问题包括：删除常用词，特殊字符，大小写，形态</p>
+
+<h2 id="停用词-stop-words">停用词（Stop words）</h2>
+
+<p>去除常用词：the, a, be
+为什么去除常用词：节省空间，没有语义内容
+例外：&rdquo;to be or not to be&rdquo; 全是停用词</p>
+
+<h2 id="口音-变音符号-accents-diacritics">口音/变音符号（Accents/Diacritics）</h2>
+
+<p>naive vs. naïve
+pena (sorrow) vs peña (cliff)</p>
+
+<h2 id="case">Case</h2>
+
+<p>将所有内容转换为小写。</p>
+
+<h2 id="词干-lemmatizing-stemming-lemmatizing">词干/ Lemmatizing（Stemming / Lemmatizing）</h2>
+
+<h3 id="形态学-morphology">形态学(morphology)</h3>
+
+<p>（语言学）关于单词如何在语言中采用不同形式的规则的研究。
+例：<div class='align-center'>
+  <p><img src="3.png" alt="img" title="png" /></p>
+
+</div></p>
+
+<h3 id="stem">stem</h3>
+
+<p>基于粗糙形态学启发式标准化。(To normalize based on crude morphology heuristics.)
+删除所有“-s”和“-ed”后缀。</p>
+
+<h3 id="lemmatize">lemmatize</h3>
+
+<p>使用语言的形态规则创建单词类型的等价类。
+To create equivalence classes of word types using the morphological rules of a language.
+通常依靠词性标注来选择规则。
+(Often relies on part-of-speech tagging to select rules.)
+例:if bed is a noun, then do not remove -ed suffix.</p>
+
+<h3 id="simple-stemmer">Simple stemmer</h3>
+
+<p>定义一个保留词干的stem函数，其实自己写实现不现实。
+[&lsquo;tied&rsquo;, &lsquo;ties&rsquo;, &lsquo;tis&rsquo;, &lsquo;bed&rsquo;, &lsquo;cities&rsquo;]，分析一下这5个词的词干。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">stem</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ies&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;ed&#39;</span><span class="p">,</span> <span class="s1">&#39;ing&#39;</span><span class="p">]:</span> <span class="c1"># order matters!</span>
+    	<span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">word</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)]</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="stemming-errors">Stemming Errors</h3>
+
+<p>over-stemming: merge types that should not be merged.
+under-stemming: fail to merge types that should be merged.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tied&#39;</span><span class="p">,</span> <span class="s1">&#39;ties&#39;</span><span class="p">,</span> <span class="s1">&#39;tis&#39;</span><span class="p">,</span> <span class="s1">&#39;bed&#39;</span><span class="p">,</span> <span class="s1">&#39;cities&#39;</span><span class="p">]</span>
+<span class="k">print</span><span class="p">([</span><span class="n">stem</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">types</span><span class="p">])</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>[&lsquo;ti&rsquo;, &rsquo;t&rsquo;, &lsquo;ti&rsquo;, &lsquo;b&rsquo;, &lsquo;cit&rsquo;]</p>
+</blockquote>
+
+<p>输出明显有问题，去掉了不该去的</p>
+
+<h3 id="porter-stemmer">Porter Stemmer</h3>
+
+<p>非常常用的词干分析器，具有一组复杂的启发式算法。
+nltk的词干分析器比刚才那个优秀多了，哈哈</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">nltk.stem</span> <span class="kn">import</span> <span class="n">PorterStemmer</span> <span class="c1"># See nltk.org (`pip install nltk`)</span>
+<span class="c1"># http://tartarus.org/~martin/PorterStemmer/</span>
+<span class="c1"># Original paper: http://web.simmons.edu/~benoit/lis466/PorterStemmingAlgorithm.pdf</span>
+<span class="n">porter</span> <span class="o">=</span> <span class="n">PorterStemmer</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">types</span><span class="p">)</span>
+<span class="k">print</span><span class="p">([</span><span class="n">porter</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">types</span><span class="p">])</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>[&lsquo;tie&rsquo;, &lsquo;tie&rsquo;, &lsquo;ti&rsquo;, &lsquo;bed&rsquo;, &lsquo;citi&rsquo;]</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">porter</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="s1">&#39;city&#39;</span><span class="p">))</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>citi</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">types</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bed&#39;</span><span class="p">,</span> <span class="s1">&#39;kiss&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;tied&#39;</span><span class="p">,</span> <span class="s1">&#39;tis&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;universal&#39;</span><span class="p">,</span> <span class="s1">&#39;university&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;experiment&#39;</span><span class="p">,</span> <span class="s1">&#39;experience&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;past&#39;</span><span class="p">,</span> <span class="s1">&#39;paste&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;alumnus&#39;</span><span class="p">,</span> <span class="s1">&#39;alumni&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;adhere&#39;</span><span class="p">,</span> <span class="s1">&#39;adhesion&#39;</span><span class="p">,</span>
+         <span class="s1">&#39;create&#39;</span><span class="p">,</span> <span class="s1">&#39;creation&#39;</span><span class="p">]</span>
+<span class="n">porter_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">porter</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">types</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">porter_results</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>[&lsquo;bed&rsquo;, &lsquo;kiss&rsquo;, &lsquo;tie&rsquo;, &lsquo;ti&rsquo;, &lsquo;univers&rsquo;, &lsquo;univers&rsquo;, &lsquo;experi&rsquo;, &lsquo;experi&rsquo;, &lsquo;past&rsquo;, &lsquo;past&rsquo;, &lsquo;alumnu&rsquo;, &lsquo;alumni&rsquo;, &lsquo;adher&rsquo;, &lsquo;adhes&rsquo;, &lsquo;creat&rsquo;, &lsquo;creation&rsquo;]</p>
+
+<h3 id="wordnet-lemmatize">WordNet Lemmatize</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">nltk.stem.wordnet</span> <span class="kn">import</span> <span class="n">WordNetLemmatizer</span>
+<span class="c1"># See description: https://wordnet.princeton.edu/wordnet/man/morphy.7WN.html</span>
+<span class="n">lemm</span> <span class="o">=</span> <span class="n">WordNetLemmatizer</span><span class="p">()</span>
+<span class="n">lemm_results</span> <span class="o">=</span> <span class="p">[</span><span class="n">lemm</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">types</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%15s</span><span class="se">\t</span><span class="si">%15s</span><span class="se">\t</span><span class="si">%15s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;porter&#39;</span><span class="p">,</span> <span class="s1">&#39;lemmatizer&#39;</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%15s</span><span class="se">\t</span><span class="si">%15s</span><span class="se">\t</span><span class="si">%15s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                 <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">types</span><span class="p">,</span> <span class="n">porter_results</span><span class="p">,</span> <span class="n">lemm_results</span><span class="p">)]))</span></code></pre></td></tr></table>
+</div>
+</div>
+<div class='align-center'>
+  <p><img src="4.png" alt="img" title="png" /></p>
+
+</div>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1">#WordNet Lemmatizer needs part of speech（词性）:</span>
+<span class="k">print</span><span class="p">(</span><span class="n">lemm</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="s1">&#39;are&#39;</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">lemm</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="s1">&#39;is&#39;</span><span class="p">))</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>are
+is</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">lemm</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="s1">&#39;are&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">lemm</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="s1">&#39;is&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">))</span></code></pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>be
+be</p>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">KoU2N</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-22</span>
+  </p>
+  
+  
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2/">信息检索</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/passage-re-ranking-with-bert/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">PASSAGE RE-RANKING WITH BERT[论文翻译]</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E5%85%A5%E9%97%A81/">
+            <span class="next-text nav-default">信息检索入门1</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:gao_yun@.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/kouunn" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://kou2n.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">KoU2N</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

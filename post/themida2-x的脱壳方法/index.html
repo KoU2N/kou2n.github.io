@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Themida2.X的脱壳方法 - KoU2N‘s BLOG</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="KoU2N" /><meta name="description" content="某外挂，PEID扫一下，啥也没有 一共6个区段，最后俩个随机填充区段。 一开始以为是vc&#43;&#43;6.0，后来找到了FF 55 FC 5F 5E特征码，才知道是易语" /><meta name="keywords" content="KoU2N, blog, KoU2N" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.53 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://kou2n.github.io/post/themida2-x%E7%9A%84%E8%84%B1%E5%A3%B3%E6%96%B9%E6%B3%95/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Themida2.X的脱壳方法" />
+<meta property="og:description" content="某外挂，PEID扫一下，啥也没有 一共6个区段，最后俩个随机填充区段。 一开始以为是vc&#43;&#43;6.0，后来找到了FF 55 FC 5F 5E特征码，才知道是易语" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kou2n.github.io/post/themida2-x%E7%9A%84%E8%84%B1%E5%A3%B3%E6%96%B9%E6%B3%95/" /><meta property="article:published_time" content="2012-10-22T22:33:53&#43;00:00"/>
+<meta property="article:modified_time" content="2012-10-22T22:33:53&#43;00:00"/>
+
+<meta itemprop="name" content="Themida2.X的脱壳方法">
+<meta itemprop="description" content="某外挂，PEID扫一下，啥也没有 一共6个区段，最后俩个随机填充区段。 一开始以为是vc&#43;&#43;6.0，后来找到了FF 55 FC 5F 5E特征码，才知道是易语">
+
+
+<meta itemprop="datePublished" content="2012-10-22T22:33:53&#43;00:00" />
+<meta itemprop="dateModified" content="2012-10-22T22:33:53&#43;00:00" />
+<meta itemprop="wordCount" content="542">
+
+
+
+<meta itemprop="keywords" content="windows逆向,脱壳," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Themida2.X的脱壳方法"/>
+<meta name="twitter:description" content="某外挂，PEID扫一下，啥也没有 一共6个区段，最后俩个随机填充区段。 一开始以为是vc&#43;&#43;6.0，后来找到了FF 55 FC 5F 5E特征码，才知道是易语"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">KoU2N</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">KoU2N</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Themida2.X的脱壳方法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2012-10-22 </span>
+        <div class="post-category">
+            <a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"> 信息安全 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#某外挂-peid扫一下-啥也没有">某外挂，PEID扫一下，啥也没有</a></li>
+<li><a href="#2-x版本入口特征">2.x版本入口特征</a></li>
+<li><a href="#脱壳前准备">脱壳前准备</a></li>
+<li><a href="#到oep方法">到oep方法</a></li>
+<li><a href="#直接dump-修复iat即可">直接DUMP，修复IAT即可。</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="某外挂-peid扫一下-啥也没有">某外挂，PEID扫一下，啥也没有</h2>
+
+<p><div class='align-center'>
+  <p><img src="1.jpg" alt="img" title="jpg" /></p>
+
+</div>
+一共6个区段，最后俩个随机填充区段。
+一开始以为是vc++6.0，后来找到了FF 55 FC 5F 5E特征码，才知道是易语言。</p>
+
+<h2 id="2-x版本入口特征">2.x版本入口特征</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-ASM" data-lang="ASM"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-ASM" data-lang="ASM"><span class="err">007</span><span class="nf">FE000</span> <span class="err">&gt;</span>  <span class="mi">83</span><span class="no">EC</span> <span class="mi">04</span>         <span class="no">sub</span> <span class="no">esp</span><span class="p">,</span><span class="mi">0x4</span>
+<span class="err">007</span><span class="nf">FE003</span>    <span class="mi">50</span>              <span class="no">push</span> <span class="no">eax</span>
+<span class="err">007</span><span class="nf">FE004</span>    <span class="mi">53</span>              <span class="no">push</span> <span class="no">ebx</span>
+<span class="err">007</span><span class="nf">FE005</span>    <span class="no">E8</span> <span class="mi">01000000</span>     <span class="no">call</span> <span class="no">SAX2_5脱.007FE00B</span>
+<span class="err">007</span><span class="nf">FE00A</span>    <span class="no">CC</span>              <span class="no">int3</span>
+<span class="err">007</span><span class="nf">FE00B</span>    <span class="mi">58</span>              <span class="no">pop</span> <span class="no">eax</span>
+<span class="err">007</span><span class="nf">FE00C</span>    <span class="mi">89</span><span class="no">C3</span>            <span class="no">mov</span> <span class="no">ebx</span><span class="p">,</span><span class="no">eax</span>
+<span class="err">007</span><span class="nf">FE00E</span>    <span class="mi">40</span>              <span class="no">inc</span> <span class="no">eax</span>
+<span class="err">007</span><span class="nf">FE00F</span>    <span class="mi">2</span><span class="no">D</span> <span class="mi">00800800</span>     <span class="no">sub</span> <span class="no">eax</span><span class="p">,</span><span class="mi">0x88000</span>
+<span class="err">007</span><span class="nf">FE014</span>    <span class="mi">2</span><span class="no">D</span> <span class="mi">17186000</span>     <span class="no">sub</span> <span class="no">eax</span><span class="p">,</span><span class="no">SAX2_5脱.00601817</span>
+<span class="err">007</span><span class="nf">FE019</span>    <span class="mi">05</span> <span class="mi">0</span><span class="no">C186000</span>     <span class="no">add</span> <span class="no">eax</span><span class="p">,</span><span class="no">SAX2_5脱.0060180C</span>
+<span class="err">007</span><span class="nf">FE01E</span>    <span class="mi">803</span><span class="no">B</span> <span class="no">CC</span>         <span class="no">cmp</span> <span class="no">byte</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="no">ebx</span><span class="p">],</span><span class="mi">0xCC</span>
+<span class="err">007</span><span class="nf">FE021</span>    <span class="mi">75</span> <span class="mi">19</span>           <span class="no">jnz</span> <span class="no">XSAX2_5脱.007FE03C</span>
+<span class="err">007</span><span class="nf">FE023</span>    <span class="no">C603</span> <span class="mi">00</span>         <span class="no">mov</span> <span class="no">byte</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="no">ebx</span><span class="p">],</span><span class="mi">0x0</span>
+<span class="err">007</span><span class="nf">FE026</span>    <span class="no">BB</span> <span class="mi">00100000</span>     <span class="no">mov</span> <span class="no">ebx</span><span class="p">,</span><span class="mi">0x1000</span>
+<span class="err">007</span><span class="nf">FE02B</span>    <span class="mi">68</span> <span class="no">FF731D75</span>     <span class="no">push</span> <span class="mi">0x751D73FF</span>
+<span class="err">007</span><span class="nf">FE030</span>    <span class="mi">68</span> <span class="mi">68598</span><span class="no">F16</span>     <span class="no">push</span> <span class="mi">0x168F5968</span>
+<span class="err">007</span><span class="nf">FE035</span>    <span class="mi">53</span>              <span class="no">push</span> <span class="no">ebx</span>
+<span class="err">007</span><span class="nf">FE036</span>    <span class="mi">50</span>              <span class="no">push</span> <span class="no">eax</span>
+<span class="err">007</span><span class="nf">FE037</span>    <span class="no">E8</span> <span class="mi">0</span><span class="no">A000000</span>     <span class="no">call</span> <span class="no">SAX2_5脱.007FE046</span>
+<span class="err">007</span><span class="nf">FE03C</span>    <span class="mi">83</span><span class="no">C0</span> <span class="mi">00</span>         <span class="no">add</span> <span class="no">eax</span><span class="p">,</span><span class="mi">0x0</span>
+<span class="err">007</span><span class="nf">FE03F</span>    <span class="mi">894424</span> <span class="mi">08</span>       <span class="no">mov</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ss</span><span class="p">:[</span><span class="no">esp</span><span class="err">+</span><span class="mi">0x8</span><span class="p">],</span><span class="no">eax</span>
+<span class="err">007</span><span class="nf">FE043</span>    <span class="mi">5</span><span class="no">B</span>              <span class="no">pop</span> <span class="no">ebx</span>
+<span class="err">007</span><span class="nf">FE044</span>    <span class="mi">58</span>              <span class="no">pop</span> <span class="no">eax</span>
+<span class="err">007</span><span class="nf">FE045</span>    <span class="no">C3</span>              <span class="no">retn</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="脱壳前准备">脱壳前准备</h2>
+
+<p>反调试：用Hide ollydebug这个插件以及SOD这俩个插件，能开的都开了，才勉强过了反调试。
+由于程序检测硬件断点，所以脚本跑不起来，到oep，直接dump就可以。IAT没有加密，这里很不解，难道不是2.x版本的tmd克么？</p>
+
+<h2 id="到oep方法">到oep方法</h2>
+
+<p>.text段下内存写入断点,shift+F9,取消内存断点.
+bp GetProcessHeap+C,F9,取消断点.
+.text段下F2断点,F9到oep或者oep的第一个call里面的位置.</p>
+
+<h2 id="直接dump-修复iat即可">直接DUMP，修复IAT即可。</h2>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">KoU2N</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2012-10-22</span>
+  </p>
+  
+  
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/windows%E9%80%86%E5%90%91/">windows逆向</a>
+          <a href="/tags/%E8%84%B1%E5%A3%B3/">脱壳</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/ida%E5%88%86%E6%9E%90%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95dos%E7%A8%8B%E5%BA%8F%E5%AF%86%E7%A0%81/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">IDA分析一个简单dos程序密码</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        <a class="next" href="/post/5%E7%A7%8D%E8%AF%AD%E8%A8%80%E7%9A%84%E5%8C%BA%E6%AE%B5%E4%BF%A1%E6%81%AF/">
+            <span class="next-text nav-default">5种语言的区段信息</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:gao_yun@.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/kouunn" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+  <a href="https://kou2n.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">KoU2N</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"  integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
